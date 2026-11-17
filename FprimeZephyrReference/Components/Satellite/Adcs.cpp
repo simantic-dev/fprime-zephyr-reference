@@ -28,12 +28,22 @@ void Adcs::run_handler(FwIndexType portNum, U32 context) {
     for (U8 i = 0; i < 4; i++) {
         const enum sensor_channel chan = i < 2 ? SENSOR_CHAN_ACCEL_XYZ : SENSOR_CHAN_MAGN_XYZ;
         struct sensor_value xyz[3];
-        k_mutex_lock(&magn_lock, K_FOREVER);
-        int err = sensor_sample_fetch(sensors[i]);
-        if (!err) {
-            err = sensor_channel_get(sensors[i], chan, xyz);
+        int err = 0;
+        for (U8 attempt = 0; attempt < 2; attempt++) {
+            if (attempt) {
+                // IST8310 takes 6 ms per conversion; a fetch that lands in Detumble's conversion returns -EIO.
+                k_msleep(6);
+            }
+            k_mutex_lock(&magn_lock, K_FOREVER);
+            err = sensor_sample_fetch(sensors[i]);
+            if (!err) {
+                err = sensor_channel_get(sensors[i], chan, xyz);
+            }
+            k_mutex_unlock(&magn_lock);
+            if (!err) {
+                break;
+            }
         }
-        k_mutex_unlock(&magn_lock);
         if (err) {
             this->log_WARNING_HI_SensorError(i, err);
             continue;

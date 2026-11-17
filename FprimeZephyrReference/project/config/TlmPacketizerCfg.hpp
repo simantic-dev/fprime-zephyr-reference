@@ -15,11 +15,8 @@
 
 #include <Fw/FPrimeBasicTypes.hpp>
 namespace Svc {
-//! Maximum number of packets
-static const FwChanIdType MAX_PACKETIZER_PACKETS = 6;
-
 //! Maximum number of channels that the packetizer can handle. Must be >= number of non-omitted channels
-static const FwChanIdType MAX_PACKETIZER_CHANNELS = 48;
+static const FwChanIdType MAX_PACKETIZER_CHANNELS = 64;  // 53 packed: upstream's plus the Satellite and Detumble packets
 
 //! Maximum number of missing channels to track and report
 static const FwChanIdType TLMPACKETIZER_MAX_MISSING_TLM_CHECK = 1;

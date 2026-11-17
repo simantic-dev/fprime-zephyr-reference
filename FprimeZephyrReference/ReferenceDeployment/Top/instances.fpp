@@ -56,15 +56,17 @@ module ReferenceDeployment {
   
   instance nullPrmDb: Components.NullPrmDb base id 0x10015000
 
+  instance touchReset: Zephyr.ZephyrTouchReset base id 0x10016000
+
   # Satellite subsystems (Components/Satellite), demo for the NUCLEO-H723ZG + sim
-  instance eps: Components.EpsCan base id 0x10016000
+  instance eps: Components.EpsCan base id 0x10017000
 
-  instance adcs: Components.Adcs base id 0x10017000
+  instance adcs: Components.Adcs base id 0x10018000
 
-  instance mtq: Components.Magnetorquer base id 0x10018000
+  instance mtq: Components.Magnetorquer base id 0x10019000
 
-  instance fram: Components.FramParams base id 0x10019000
+  instance fram: Components.FramParams base id 0x1001A000
 
-  instance detumble: Components.Detumble base id 0x1001A000
+  instance detumble: Components.Detumble base id 0x1001B000
 
 }

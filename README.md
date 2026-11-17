@@ -46,7 +46,7 @@ protocol is made up for this demo: [`sim/EPS-PROTOCOL.md`](sim/EPS-PROTOCOL.md).
 video is generated from two recorded runs (`video/`; every number on screen comes from
 `video/runs/`).
 
-Branch `simantic-sim-demo`, based on fprime-community/fprime-zephyr-reference `23aade5`.
+Branch `simantic-sim-demo`, merged up to fprime-community/fprime-zephyr-reference `devel` at `4af31f4`.
 
 ---
 

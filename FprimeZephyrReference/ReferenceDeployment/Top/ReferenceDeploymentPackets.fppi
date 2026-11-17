@@ -15,6 +15,10 @@ telemetry packets ReferenceDeploymentPackets {
     CdhCore.events.EventsDropped
     ComCcsds.commsBufferManager.NoBuffs
     ComCcsds.commsBufferManager.EmptyBuffs
+    ComCcsds.comQueue.comIngressDropped
+    ComCcsds.comQueue.buffIngressDropped
+    ComCcsds.comQueue.comManagedDropped
+    ComCcsds.comQueue.buffManagedDropped
     rateGroup10Hz.RgCycleSlips
     rateGroup1Hz.RgCycleSlips
   }
@@ -34,8 +38,17 @@ telemetry packets ReferenceDeploymentPackets {
     CdhCore.version.LibraryVersion01
   }
 
+  packet ComDriver id 5 group 2 {
+    comDriver.RxBytes
+    comDriver.RxOverrunCount
+    comDriver.RxBackpressureCount
+    comDriver.RxAllocFailCount
+    comDriver.TxBytes
+    comDriver.TxDropCount
+  }
 
-  packet Satellite id 5 group 1 {
+
+  packet Satellite id 6 group 1 {
     eps.vbat_mV
     eps.ibat_mA
     eps.v3v3_mV
@@ -55,7 +68,7 @@ telemetry packets ReferenceDeploymentPackets {
     fram.boot_count
   }
 
-  packet Detumble id 6 group 1 {
+  packet Detumble id 7 group 1 {
     detumble.mode
     detumble.gain
     detumble.bdot_uT_s

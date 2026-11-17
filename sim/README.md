@@ -5,8 +5,8 @@
 simulator (proprietary; install with `curl -fsSL https://simantic.com/install | sh`),
 inside an orbit and power environment, with the stock F' ground station attached.
 
-Upstream base: fprime-community/fprime-zephyr-reference `23aade5`, the commit this
-branch is known to build from, with `lib/fprime` at nasa/fprime `744d3e3`.
+Upstream base: fprime-community/fprime-zephyr-reference `devel` at `4af31f4`, with
+`lib/fprime` at nasa/fprime `f28d2da` (upstream's pin). `fprime-demo.elf` is built from that.
 
 ## Files
 
@@ -18,7 +18,7 @@ branch is known to build from, with `lib/fprime` at nasa/fprime `744d3e3`.
 | `peers/eps_node.py` | the EPS, speaking `EPS-PROTOCOL.md` |
 | `peers/fram_slave.py`, `peers/lis2dw12.py`, `peers/ist8310.py` | FRAM, accelerometers, magnetometers |
 | `walkthrough.sh` | the scripted walkthrough `../demo` runs against the GDS |
-| `build.sh` | rebuilds `fprime-demo.elf` and `dictionary.json` (Zephyr SDK 0.17.0) |
+| `build.sh` | rebuilds `fprime-demo.elf` and `dictionary.json` (Zephyr SDK 1.0) |
 
 ## NUCLEO-H723ZG pins
 

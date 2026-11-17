@@ -17,7 +17,7 @@ esac
 ROOT=$(cd -- "$(dirname -- "$0")" && pwd)
 OUT=$ROOT/.demo
 VENV=$OUT/venv
-GDS_VERSION=4.4.0a3   # the GDS of nasa/fprime 744d3e3 (lib/fprime/requirements.txt)
+GDS_VERSION=4.4.0     # the GDS of nasa/fprime f28d2da (lib/fprime/requirements.txt)
 GDS_PORT=5761 GUI_PORT=5800 TTS_PORT=50050
 
 command -v sim >/dev/null 2>&1 || {
