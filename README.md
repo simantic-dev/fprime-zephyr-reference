@@ -5,7 +5,7 @@ upstream-tested **NUCLEO-H723ZG**, runs unmodified on a simulated board inside a
 orbit and power environment, with the stock F´ ground station attached. No board,
 no satellite.
 
-[![F´ demo video: 62 s, click to play](video/poster.png)](video/fprime-demo.mp4)
+[![F´ demo video: 34 s, click to play](video/poster.png)](video/fprime-demo.mp4)
 
 ```sh
 ./demo            # nominal: orbit, eclipse, commands, detumble

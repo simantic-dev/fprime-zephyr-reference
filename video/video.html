@@ -77,18 +77,20 @@ const find = n => evs.find(e => e.name == n);
 const KIND = { FRAME_LOST: "A CAN frame is lost", CRC_ERROR: "The reply is corrupted", TIMEOUT: "The reply comes too late" };
 const pairs = [0, 2, 4].map(i => ({ retry: D.faults[i], ok: D.faults[i + 1], kind: D.faults[i].text.match(/(FRAME_LOST|CRC_ERROR|TIMEOUT)/)[1] }));
 
+const orbitVt = (t, a) => lerp(ROWS[0].t, dark[dark.length - 1].t, prog(t, a + 0.5, a + 7.2));
+
 Video({
   title: `NASA F&nbsp;Prime flight software on a simulated ${D.board}`,
   logo: ".kit/assets/logo-full.svg",
-  steps: [["setup", "Setup"], ["orbit", "Orbit"], ["eclipse", "Eclipse"], ["commands", "Commands"], ["faults", "Faults"]],
+  steps: [["setup", "Setup"], ["orbit", "Orbit"], ["commands", "Commands"], ["faults", "Faults"]],
   scenes: [
-    { key: "title", from: 0, to: 5,
+    { key: "title", from: 0, to: 3.5,
       html: `<div class="center title" style="bottom:-60px"><h1>NASA's F&nbsp;Prime flight software<br>in a simulated orbit</h1><p>The flight build runs unmodified on a simulated ${D.board}, with F&nbsp;Prime's own ground station attached.</p></div>`,
-      draw(t, a, e) { appear($("h1", e), t, a + 0.3, 0.8); appear($("p", e), t, a + 1.0, 0.8); } },
+      draw(t, a, e) { appear($("h1", e), t, a + 0.2, 0.6); appear($("p", e), t, a + 0.7, 0.6); } },
 
-    { key: "setup", from: 5, to: 15, step: "setup",
+    { key: "setup", from: 3.5, to: 9.5, step: "setup",
       caption: ["Setup", "Real flight software, on a simulated dev board as the satellite computer.",
-        (t, a) => t < a + 5 ? "The firmware is the build that would be flashed: F&nbsp;Prime on Zephyr." : "Everything it talks to is simulated: power, memory, sensors, the orbit."],
+        "Everything it talks to is simulated: power, memory, sensors, the orbit."],
       html: `
         <div class="abs legend" style="left:0;top:0" id="su-leg"><span><i style="background:#fff;border:1.5px solid var(--ink)"></i>real software, unchanged</span><span><i class="simbox"></i>simulated</span></div>
         <div class="abs card box" style="left:0;top:250px;width:330px" id="su-gds"><div class="k">Ground station</div><div class="v">fprime-gds</div><div class="s">F&nbsp;Prime's stock ground software</div></div>
@@ -101,26 +103,20 @@ Video({
             <div class="bus" style="left:1090px;top:${i*170+22}px" id="su-l${i+1}">${bus}</div>
             <div class="abs simbox box" style="left:1240px;top:${i*170}px;width:520px;height:120px" id="su-p${i}"><div class="v" style="margin-top:0">${n}</div><div class="s">${s}</div></div>`).join("")}`,
       draw(t, a) {
-        appear($("#su-leg"), t, a + 0.4); appear($("#su-mcu"), t, a + 0.6); appear($("#su-fw"), t, a + 1.2);
-        appear($("#su-gds"), t, a + 1.9); appear($("#su-w0"), t, a + 1.9); appear($("#su-l0"), t, a + 1.9);
-        for (let i = 0; i < 4; i++) { const at = a + 3.2 + i * 0.6; appear($("#su-p" + i), t, at); appear($("#su-w" + (i + 1)), t, at); appear($("#su-l" + (i + 1)), t, at); }
+        appear($("#su-leg"), t, a + 0.3); appear($("#su-mcu"), t, a + 0.4); appear($("#su-fw"), t, a + 0.7);
+        appear($("#su-gds"), t, a + 1.1); appear($("#su-w0"), t, a + 1.1); appear($("#su-l0"), t, a + 1.1);
+        for (let i = 0; i < 4; i++) { const at = a + 1.6 + i * 0.3; appear($("#su-p" + i), t, at); appear($("#su-w" + (i + 1)), t, at); appear($("#su-l" + (i + 1)), t, at); }
       } },
 
-    { key: "orbit", from: 15, to: 25, step: "orbit",
-      caption: ["Orbit", "The satellite tumbles, and the sun sweeps across its panels.",
-        "Each bar is a reading the firmware took through its own ADC."],
+    { key: "orbit", from: 9.5, to: 18.5, step: "orbit",
+      caption: ["Orbit", "The sun sweeps across the panels, then Earth's shadow.",
+        (t, a) => orbitVt(t, a) < lastLit.t + 0.5 ? "Each bar is a reading the firmware took through its own ADC." : `At ${lastLit.t} s every sensor reads zero and the battery discharges.`],
       html: panelsHTML("or"),
-      draw(t, a) { appear($("#or-card"), t, a + 0.4); drawPanels("or", lerp(ROWS[0].t, lastLit.t - 2, prog(t, a + 0.8, a + 8))); } },
+      draw(t, a) { appear($("#or-card"), t, a + 0.3); drawPanels("or", orbitVt(t, a)); } },
 
-    { key: "eclipse", from: 25, to: 34, step: "eclipse",
-      caption: ["Eclipse", `At ${lastLit.t} s the satellite passes into Earth's shadow.`,
-        (t, a) => t < a + 4.5 ? "Every sun sensor drops to zero, and the battery starts to discharge." : "Nothing told the firmware: it saw the eclipse through its own sensors."],
-      html: panelsHTML("ec"),
-      draw(t, a) { drawPanels("ec", lerp(lastLit.t - 2, dark[dark.length - 1].t, prog(t, a + 0.8, a + 6.5))); } },
-
-    { key: "commands", from: 34, to: 46, step: "commands",
+    { key: "commands", from: 18.5, to: 24.5, step: "commands",
       caption: ["Commands", "Commands go up the ground link and through F&nbsp;Prime's dispatcher.",
-        (t, a) => t < a + 6 ? "Each reaches its component, which talks to the hardware and reports back." : "Times are the firmware's own clock: simulated time."],
+        "Times are the firmware's own clock: simulated time."],
       html: `<div class="abs card stack term" style="left:0;top:0;width:1120px;height:100%"><div class="bar"><span class="dot sim"></span>F&nbsp;Prime events, as the ground station received them</div>
              <div class="body"><pre id="co-p"></pre></div></div>
              <div class="abs card box" style="left:1190px;top:0;width:570px" id="co-r0"><div class="k">Ping the power system over CAN</div><div class="res" id="co-v0"></div></div>
@@ -132,7 +128,7 @@ Video({
         $("#co-v2").textContent = find("FramValue").text.match(/= (0x[0-9a-f]+)/)[1];
       },
       draw(t, a) {
-        const vt = lerp(T0, T1, prog(t, a + 0.8, a + 8.5));
+        const vt = lerp(T0, T1, prog(t, a + 0.4, a + 4.4));
         let seen = new Set(), out = [];
         for (const e of evs.filter(e => e.t <= vt)) {
           if (!seen.has(e.cmd)) { seen.add(e.cmd); out.push(`<span class="k">&gt; ${e.cmd}</span>`); }
@@ -140,12 +136,12 @@ Video({
           out.push(`<span class="ts">${e.t.toFixed(3).padStart(8)} s</span>  ${key ? `<span class="k">${e.name.padEnd(17)}</span>` : e.name.padEnd(17)} ${e.text}`);
         }
         $("#co-p").innerHTML = out.join("\n");
-        [["PingReply", 0], ["DutySet", 1], ["FramValue", 2]].forEach(([n, i]) => appear($("#co-r" + i), t, a + 0.8 + (find(n).t - T0) / (T1 - T0) * 7.7));
+        [["PingReply", 0], ["DutySet", 1], ["FramValue", 2]].forEach(([n, i]) => appear($("#co-r" + i), t, a + 0.4 + (find(n).t - T0) / (T1 - T0) * 4));
       } },
 
-    { key: "faults", from: 46, to: 57, step: "faults",
+    { key: "faults", from: 24.5, to: 30.5, step: "faults",
       caption: ["Faults", "Three power-system replies are damaged on the CAN bus.",
-        (t, a) => t < a + 5.5 ? "Failures you cannot make a real power system produce on cue." : "The firmware retries each one and recovers. None is lost."],
+        "The firmware retries each one and recovers. None is lost."],
       html: `${pairs.map((p, i) => `<div class="abs card fault" style="left:0;top:${i*190}px;width:1120px" id="fa-${i}">
                <div><div class="kind">${p.kind}</div><div class="what">${KIND[p.kind]}</div></div>
                <div><div class="line"><span class="ts" style="color:var(--sim)">${p.retry.t.toFixed(3)} s</span>  HkRetry      attempt 1 failed, retrying</div>
@@ -153,13 +149,13 @@ Video({
              <div class="abs" style="left:1220px;top:120px" id="fa-big"><div class="label">Recovered</div><div class="bignum">${pairs.length}<small>of ${D.hk_retries}</small></div>
                <div class="s" style="font:400 24px var(--sans);color:var(--muted);margin-top:16px">hk_retries = ${D.hk_retries}, no HkFailed</div></div>`,
       draw(t, a) {
-        pairs.forEach((p, i) => { appear($("#fa-" + i), t, a + 0.6 + i * 1.6); appear($("#fa-ok" + i), t, a + 1.4 + i * 1.6); });
-        appear($("#fa-big"), t, a + 6.2, 0.7);
+        pairs.forEach((p, i) => { appear($("#fa-" + i), t, a + 0.3 + i * 0.8); appear($("#fa-ok" + i), t, a + 0.7 + i * 0.8); });
+        appear($("#fa-big"), t, a + 3.0, 0.6);
       } },
 
-    { key: "end", from: 57, to: 62,
+    { key: "end", from: 30.5, to: 33.5,
       html: `<div class="center end" style="bottom:-100px"><img src=".kit/assets/logo-full.svg"><p>Real firmware. Simulated hardware.</p><div class="u">simantic.com</div></div>`,
-      draw(t, a, e) { appear($("img", e), t, a + 0.4, 0.8); appear($("p", e), t, a + 1.0, 0.8); appear($(".u", e), t, a + 1.6, 0.8); } },
+      draw(t, a, e) { appear($("img", e), t, a + 0.2, 0.6); appear($("p", e), t, a + 0.6, 0.6); appear($(".u", e), t, a + 1.0, 0.6); } },
   ],
 });
 </script>
