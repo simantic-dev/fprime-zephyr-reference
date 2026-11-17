@@ -1,3 +1,5 @@
+> **[Simantic](https://simantic.com)** runs this firmware on simulated hardware, no board needed. Try it at [simantic.com](https://simantic.com).
+
 # F´ in a simulated orbit: run it with one command
 
 This fork adds a demo to the F´ Zephyr reference: the deployment, built for the
