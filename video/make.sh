@@ -17,3 +17,6 @@ git -C "$PYRITE" archive origin/main docs/video/assets docs/video/render.py | ta
 if [ "${1:-}" = "--stills" ]; then "$PY" "$HERE/.kit/render.py" "$HERE/${PAGE:-video.html}" "$@"; exit; fi
 "$PY" "$HERE/.kit/render.py" "$HERE/video.html" "$HERE/media-demo.mp4"           # media demo, 34 s
 "$PY" "$HERE/.kit/render.py" "$HERE/long.html" "$HERE/technical-demo.mp4"       # technical demo, 67 s: firmware, load, boot, execute first
+# the README's inline preview of the technical demo (GitHub does not play a repository MP4 in a README)
+"$("$PY" -c 'import imageio_ffmpeg; print(imageio_ffmpeg.get_ffmpeg_exe())')" -loglevel error -y -i "$HERE/technical-demo.mp4" -vf \
+  "fps=8,scale=960:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=48:stats_mode=diff[p];[b][p]paletteuse=dither=none:diff_mode=rectangle" "$HERE/technical-demo.gif"
