@@ -125,13 +125,19 @@ const orbitVt = (t, a) => lerp(ROWS[0].t, dark[dark.length - 1].t, prog(t, a + 0
 Video({
   title: `NASA F&nbsp;Prime flight software on a simulated ${D.board}`,
   logo: ".kit/assets/logo-full.svg",
-  steps: [["fw", "Firmware"], ["load", "Load"], ["boot", "Boot"], ["exec", "Execute"], ["obs", "Observe"], ["faults", "Faults"], ["run", "Run it"]],
+  steps: [["obs", "Orbit"], ["fw", "Firmware"], ["load", "Load"], ["boot", "Boot"], ["exec", "Execute"], ["faults", "Faults"], ["run", "Run it"]],
   scenes: [
     { key: "title", from: 0, to: 4,
       html: `<div class="center title" style="bottom:-60px"><h1>NASA's F&nbsp;Prime flight software<br>in a simulated orbit</h1><p>How the simulator runs the real flight build for an ${D.mcu}, from reset to orbit, with no hardware.</p></div>`,
       draw(t, a, e) { appear($("h1", e), t, a + 0.3, 0.8); appear($("p", e), t, a + 1.0, 0.8); } },
 
-    { key: "fw", from: 4, to: 11, step: "fw",
+    { key: "obs", from: 4, to: 14, step: "obs",
+      caption: ["Orbit", "In orbit: the sun sweeps across the panels, then Earth's shadow.",
+        (t, a) => orbitVt(t, a) < lastLit.t + 0.5 ? "Each bar is a reading the firmware took through its own ADC." : `At ${lastLit.t} s every sensor reads zero and the battery discharges.`],
+      html: panelsHTML("or"),
+      draw(t, a) { appear($("#or-card"), t, a + 0.3); drawPanels("or", orbitVt(t, a)); } },
+
+    { key: "fw", from: 14, to: 21, step: "fw",
       caption: ["The firmware", "One compiled file holds Zephyr, F&nbsp;Prime and the satellite's own code.", "It is the same file you would flash onto the board."],
       html: `<div class="abs card stack elf" style="left:0;top:0;width:900px"><div class="bar"><span class="dot"></span>fprime-demo.elf<span class="sub">${fmt(F.flash.used)} bytes of flash</span></div>
                ${SEGS.map(([c, n, v], i) => `<div class="seg" id="fw-s${i}"><i style="background:${c}"></i><div>${n}</div><span>${kb(v)}</span></div>`).join("")}</div>
@@ -142,7 +148,7 @@ Video({
         appear($("#fw-b"), t, a + 0.4);
       } },
 
-    { key: "load", from: 11, to: 18, step: "load",
+    { key: "load", from: 21, to: 28, step: "load",
       caption: ["Load", "The simulator places the file in a model of the chip's memory.", "Reset reads the stack pointer and the start address from the first two words, as the chip does."],
       html: `<div class="abs" style="left:0;right:0;top:10px"><div class="membar"><div class="fill" id="ld-f"></div><div class="lbl">Flash<span>${hex(F.flash.base)} · ${F.flash.size / 1048576} MB</span></div><div class="rt" id="ld-ft"></div></div>
                <div class="membar" style="margin-top:18px"><div class="fill" id="ld-r"></div><div class="lbl">RAM<span>${hex(F.ram.base)} · ${F.ram.size / 1024} KB</span></div><div class="rt" id="ld-rt"></div></div></div>
@@ -158,7 +164,7 @@ Video({
         appear($("#ld-w"), t, a + 3.0); appear($("#ld-a"), t, a + 3.7); appear($("#ld-sp"), t, a + 3.9); appear($("#ld-pc"), t, a + 4.3);
       } },
 
-    { key: "boot", from: 18, to: 26, step: "boot",
+    { key: "boot", from: 28, to: 36, step: "boot",
       caption: ["Boot", "The firmware sets up its own clocks. The model follows the registers.",
         `${F.boot.rcc_writes} writes to the clock controller, then main() at ${(F.boot.main * 1000).toFixed(1)} ms of simulated time.`],
       html: `<div class="abs" style="left:0;top:10px;display:flex;align-items:center;gap:18px" id="bt-c">
@@ -172,7 +178,7 @@ Video({
         appear($("#bt-f"), t, a + 4.6, 0.7);
       } },
 
-    { key: "exec", from: 26, to: 38, step: "exec",
+    { key: "exec", from: 36, to: 48, step: "exec",
       caption: ["Execute", "F&nbsp;Prime's rate groups run the satellite: ten times a second, and once a second.",
         (t, a) => t < a + 6 ? "Each tick is a handler starting, at the simulated time the simulator logged." : "Inside detumble.run: the loop that turns magnetometer readings into dB/dt, as compiled."],
       html: `<div class="abs card stack" style="left:0;top:0;width:440px"><div class="bar"><span class="dot sim"></span>detumble.run, filter loop<span class="sub">Thumb-2</span></div>
@@ -188,12 +194,6 @@ Video({
         const on = t < a + 6 ? -1 : Math.floor((t - a - 6) * 9) % F.loop_asm.length;
         F.loop_asm.forEach((l, i) => $("#ex-a" + i).className = i == on ? "on" : "");
       } },
-
-    { key: "obs", from: 38, to: 48, step: "obs",
-      caption: ["Observe", "In orbit: the sun sweeps across the panels, then Earth's shadow.",
-        (t, a) => orbitVt(t, a) < lastLit.t + 0.5 ? "Each bar is a reading the firmware took through its own ADC." : `At ${lastLit.t} s every sensor reads zero and the battery discharges.`],
-      html: panelsHTML("or"),
-      draw(t, a) { appear($("#or-card"), t, a + 0.3); drawPanels("or", orbitVt(t, a)); } },
 
     { key: "faults", from: 48, to: 55, step: "faults",
       caption: ["Faults", "Three power-system replies are damaged on the CAN bus.", "The firmware retries each one and recovers. None is lost."],

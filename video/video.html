@@ -82,13 +82,19 @@ const orbitVt = (t, a) => lerp(ROWS[0].t, dark[dark.length - 1].t, prog(t, a + 0
 Video({
   title: `NASA F&nbsp;Prime flight software on a simulated ${D.board}`,
   logo: ".kit/assets/logo-full.svg",
-  steps: [["setup", "Setup"], ["orbit", "Orbit"], ["commands", "Commands"], ["faults", "Faults"]],
+  steps: [["orbit", "Orbit"], ["setup", "Setup"], ["commands", "Commands"], ["faults", "Faults"]],
   scenes: [
     { key: "title", from: 0, to: 3.5,
       html: `<div class="center title" style="bottom:-60px"><h1>NASA's F&nbsp;Prime flight software<br>in a simulated orbit</h1><p>The flight build runs unmodified on a simulated ${D.board}, with F&nbsp;Prime's own ground station attached.</p></div>`,
       draw(t, a, e) { appear($("h1", e), t, a + 0.2, 0.6); appear($("p", e), t, a + 0.7, 0.6); } },
 
-    { key: "setup", from: 3.5, to: 9.5, step: "setup",
+    { key: "orbit", from: 3.5, to: 12.5, step: "orbit",
+      caption: ["Orbit", "The sun sweeps across the panels, then Earth's shadow.",
+        (t, a) => orbitVt(t, a) < lastLit.t + 0.5 ? "Each bar is a reading the firmware took through its own ADC." : `At ${lastLit.t} s every sensor reads zero and the battery discharges.`],
+      html: panelsHTML("or"),
+      draw(t, a) { appear($("#or-card"), t, a + 0.3); drawPanels("or", orbitVt(t, a)); } },
+
+    { key: "setup", from: 12.5, to: 18.5, step: "setup",
       caption: ["Setup", "Real flight software, on a simulated dev board as the satellite computer.",
         "Everything it talks to is simulated: power, memory, sensors, the orbit."],
       html: `
@@ -114,12 +120,6 @@ Video({
         appear($("#su-gds"), t, a + 1.1); appear($("#su-w0"), t, a + 1.1); appear($("#su-l0"), t, a + 1.1);
         for (let i = 0; i < 4; i++) { const at = a + 1.6 + i * 0.3; appear($("#su-p" + i), t, at); appear($("#su-w" + (i + 1)), t, at); appear($("#su-l" + (i + 1)), t, at); }
       } },
-
-    { key: "orbit", from: 9.5, to: 18.5, step: "orbit",
-      caption: ["Orbit", "The sun sweeps across the panels, then Earth's shadow.",
-        (t, a) => orbitVt(t, a) < lastLit.t + 0.5 ? "Each bar is a reading the firmware took through its own ADC." : `At ${lastLit.t} s every sensor reads zero and the battery discharges.`],
-      html: panelsHTML("or"),
-      draw(t, a) { appear($("#or-card"), t, a + 0.3); drawPanels("or", orbitVt(t, a)); } },
 
     { key: "commands", from: 18.5, to: 24.5, step: "commands",
       caption: ["Commands", "Commands go up the ground link and through F&nbsp;Prime's dispatcher.",
