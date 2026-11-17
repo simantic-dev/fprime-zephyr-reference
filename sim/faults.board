@@ -1,0 +1,6 @@
+// nucleo-h723zg.board plus EPS faults: HK requests 30/40/50 lose a CAN frame,
+// arrive with a bad CRC32C, arrive 500 ms late.
+using "nucleo-h723zg.board"
+
+sky:
+    config: "{\"eclipse_entry_s\": 90, \"spin_deg_s\": 3, \"faults\": {\"30\": \"drop\", \"40\": \"corrupt\", \"50\": \"late\"}}"

@@ -1,0 +1,16 @@
+# scenario.yaml with EPS faults on HK requests 30/40/50 (faults.board).
+# Run from sim/ (board-file `file:` paths are relative to it):
+#   sim run --scenario scenario-faults.yaml --ascii
+machines:
+  sat:
+    mcu: STM32H723ZG
+    overlay: faults.board
+    elf: fprime-demo.elf
+media:
+  - type: can
+    connect: [sat.fdcan1, sat.epsnode]
+  # Ground link on the ST-LINK VCP UART: fprime-gds connects here as an ip client.
+  - type: uart
+    bridge: tcp:5761
+    connect: [sat.usart3]
+timeout: 600

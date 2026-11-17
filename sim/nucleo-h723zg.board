@@ -1,0 +1,43 @@
+// The parts around the NUCLEO-H723ZG for the satellite demo, on the header pins
+// chosen in ../boards/nucleo_h723zg.overlay (table in README.md).
+// `file:` paths are relative to sim/: run sim from this directory (../demo does).
+
+rcc:
+    hseFrequency: 8000000   // 8 MHz from the ST-LINK MCO, the board's HSE bypass input
+
+// FRAM on SPI1, chip select D10 (PD14) driven as a GPIO by Zephyr.
+spi1mux: SPI.SPIMultiplexer @ spi1
+    ActiveLowMask: 0x1
+
+gpioPortD:
+    14 -> spi1mux@0
+
+fram: SPI.ScriptedSpiSlave @ spi1mux 0
+    file: "peers/fram_slave.py"
+
+// Attitude sensors on I2C1 (D15/D14). sky.py feeds both accelerometers
+// (free fall) and both magnetometers (the orbit's field in body axes).
+acc0: I2C.ScriptedI2cSlave @ i2c1 0x18
+    file: "peers/lis2dw12.py"
+
+acc1: I2C.ScriptedI2cSlave @ i2c1 0x19
+    file: "peers/lis2dw12.py"
+
+mag0: I2C.ScriptedI2cSlave @ i2c1 0x0C
+    file: "peers/ist8310.py"
+
+mag1: I2C.ScriptedI2cSlave @ i2c1 0x0E
+    file: "peers/ist8310.py"
+
+// EPS, CSP node 2, on FDCAN1 (PD0/PD1; the scenario's can medium joins it). The
+// sysbus address only places the node.
+epsnode: CAN.ScriptedCanNode @ sysbus 0xA0000030
+    file: "peers/eps_node.py"
+
+// Orbit/attitude/power environment: drives the six sun-sensor ADC inputs, the
+// sensors above and the EPS battery over virtual time. No register surface.
+// Demo pacing: a 3 deg/s tumble sweeps the sun across the panels, umbra from t=90 s.
+sky: Scripted.ScriptedPeripheral @ sysbus 0xA0001000
+    size: 0x10
+    file: "peers/sky.py"
+    config: "{\"eclipse_entry_s\": 90, \"spin_deg_s\": 3}"

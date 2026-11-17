@@ -1,0 +1,16 @@
+# The F' deployment on a NUCLEO-H723ZG in orbit, ground station attached (../demo).
+# Run from sim/ (board-file `file:` paths are relative to it):
+#   sim run --scenario scenario.yaml --ascii
+machines:
+  sat:
+    mcu: STM32H723ZG
+    overlay: nucleo-h723zg.board
+    elf: fprime-demo.elf
+media:
+  - type: can
+    connect: [sat.fdcan1, sat.epsnode]
+  # Ground link on the ST-LINK VCP UART: fprime-gds connects here as an ip client.
+  - type: uart
+    bridge: tcp:5761
+    connect: [sat.usart3]
+timeout: 600
