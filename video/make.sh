@@ -16,4 +16,4 @@ git -C "$PYRITE" archive origin/main docs/video/assets docs/video/render.py | ta
 [ -z "${TOOL:-}" ] || "$PY" "$HERE/collect_fw.py" "$TOOL" "$HERE/../build-fprime-automatic-zephyr/zephyr/zephyr.dts" "$HERE/fw.js"
 if [ "${1:-}" = "--stills" ]; then "$PY" "$HERE/.kit/render.py" "$HERE/${PAGE:-video.html}" "$@"; exit; fi
 "$PY" "$HERE/.kit/render.py" "$HERE/video.html" "$HERE/media-demo.mp4"           # media demo, 34 s
-"$PY" "$HERE/.kit/render.py" "$HERE/long.html" "$HERE/technical-demo.mp4"       # technical demo, 60 s: firmware, load, boot, execute first
+"$PY" "$HERE/.kit/render.py" "$HERE/long.html" "$HERE/technical-demo.mp4"       # technical demo, 67 s: firmware, load, boot, execute first

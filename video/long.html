@@ -125,7 +125,7 @@ const orbitVt = (t, a) => lerp(ROWS[0].t, dark[dark.length - 1].t, prog(t, a + 0
 Video({
   title: `NASA F&nbsp;Prime flight software on a simulated ${D.board}`,
   logo: ".kit/assets/logo-full.svg",
-  steps: [["fw", "Firmware"], ["load", "Load"], ["boot", "Boot"], ["exec", "Execute"], ["obs", "Observe"], ["faults", "Faults"]],
+  steps: [["fw", "Firmware"], ["load", "Load"], ["boot", "Boot"], ["exec", "Execute"], ["obs", "Observe"], ["faults", "Faults"], ["run", "Run it"]],
   scenes: [
     { key: "title", from: 0, to: 4,
       html: `<div class="center title" style="bottom:-60px"><h1>NASA's F&nbsp;Prime flight software<br>in a simulated orbit</h1><p>How the simulator runs the real flight build for an ${D.mcu}, from reset to orbit, with no hardware.</p></div>`,
@@ -208,9 +208,20 @@ Video({
         appear($("#fa-big"), t, a + 3.6, 0.6);
       } },
 
-    { key: "end", from: 55, to: 60,
-      html: `<div class="center end" style="bottom:-100px"><img src=".kit/assets/logo-full.svg"><p>Real firmware. Simulated hardware.</p><div class="u">simantic.com</div><div class="u" id="en-gh" style="color:var(--ink);margin-top:44px">Run it: github.com/simantic-dev/fprime-zephyr-reference</div></div>`,
-      draw(t, a, e) { appear($("img", e), t, a + 0.3, 0.7); appear($("p", e), t, a + 0.8, 0.7); appear($(".u", e), t, a + 1.3, 0.7); appear($("#en-gh"), t, a + 1.8, 0.7); } },
+    { key: "run", from: 55, to: 64, step: "run",
+      caption: ["Run it", "One command runs all of this on your machine.", "No board, no satellite: the simulator, the firmware file and F&nbsp;Prime's ground station."],
+      html: `<div class="abs card stack term" style="left:0;top:0;width:1760px;height:96%"><div class="bar"><span class="dot sim"></span>Terminal<span class="sub">github.com/simantic-dev/fprime-zephyr-reference</span></div>
+               <div class="cmd"><b>$</b> <span id="ru-c"></span></div><div class="body"><pre id="ru-p" style="font-size:19px"></pre></div></div>`,
+      draw(t, a) {
+        const cmd = "git clone https://github.com/simantic-dev/fprime-zephyr-reference && cd fprime-zephyr-reference && ./demo";
+        $("#ru-c").textContent = typed(cmd, t, a + 0.5, a + 3.0);
+        const n = Math.floor(D.walk.length * prog(t, a + 3.4, a + 7.0));   // the recorded output of ./demo, line by line
+        $("#ru-p").textContent = D.walk.slice(0, n).join("\n");
+      } },
+
+    { key: "end", from: 64, to: 67,
+      html: `<div class="center end" style="bottom:-100px"><img src=".kit/assets/logo-full.svg"><p>Real firmware. Simulated hardware.</p><div class="u">simantic.com</div></div>`,
+      draw(t, a, e) { appear($("img", e), t, a + 0.3, 0.7); appear($("p", e), t, a + 0.8, 0.7); appear($(".u", e), t, a + 1.3, 0.7); } },
   ],
 });
 </script>

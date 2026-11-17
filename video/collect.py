@@ -65,6 +65,7 @@ DATA = {
     "orbit": nom, "boot_count": boot,
     "commands": [c for c in cmds if c["cmd"]],
     "faults": flt, "hk_retries": retries,
+    "walk": [l.rstrip() for l in nom_txt.splitlines()[:19]],   # what ./demo prints first, for the "run it" scene
 }
 out.write_text("// Written by collect.py from runs/*/walkthrough.txt. Do not edit by hand.\nwindow.DATA = "
                + json.dumps(DATA, indent=1) + ";\n")

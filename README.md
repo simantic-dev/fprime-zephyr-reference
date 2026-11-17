@@ -9,7 +9,7 @@ no satellite.
 
 [![Media demo, 34 s, click to play](video/poster.png)](video/media-demo.mp4)
 
-**Technical demo (60 s)**, from reset to orbit: what is in the firmware file, how it loads, the clock
+**Technical demo (67 s)**, from reset to orbit: what is in the firmware file, how it loads, the clock
 registers it writes at boot, and its 10 Hz and 1 Hz loops as the simulator timed them:
 [video/technical-demo.mp4](video/technical-demo.mp4).
 
