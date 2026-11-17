@@ -28,8 +28,14 @@ done
 
 mkdir -p "$OUT"
 if [ ! -x "$VENV/bin/fprime-gds" ]; then
-  echo "installing fprime-gds $GDS_VERSION into $VENV"
-  python3 -m venv "$VENV"
+  # fprime-gds 4.4 needs wheels (fastcrc) that newer Pythons may not have yet
+  PY=
+  for p in python3.12 python3.13 python3.11 python3.10 python3; do
+    command -v $p >/dev/null 2>&1 && { PY=$p; break; }
+  done
+  [ -n "$PY" ] || { echo "python3 (3.10-3.13) not found" >&2; exit 1; }
+  echo "installing fprime-gds $GDS_VERSION into $VENV ($PY)"
+  "$PY" -m venv "$VENV"
   "$VENV/bin/pip" install -q "fprime-gds==$GDS_VERSION"
 fi
 
