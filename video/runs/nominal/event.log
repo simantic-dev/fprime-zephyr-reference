@@ -1,0 +1,20 @@
+TB_NONE: 124.219600s, context=0,(0(0)-124:219600),CdhCore.cmdDisp.OpCodeDispatched,16777217,EventSeverity.COMMAND,Opcode 0x10016000 dispatched to port 8
+TB_NONE: 124.228600s, context=0,(0(0)-124:228600),ReferenceDeployment.eps.PingReply,268525571,EventSeverity.ACTIVITY_HI,EPS ping reply in 11 ms
+TB_NONE: 124.238000s, context=0,(0(0)-124:238000),CdhCore.cmdDisp.OpCodeCompleted,16777218,EventSeverity.COMMAND,Opcode 0x10016000 completed
+TB_NONE: 126.217600s, context=0,(0(0)-126:217600),ReferenceDeployment.mtq.DutySet,268533760,EventSeverity.ACTIVITY_HI,MTQ Y duty 40% (pulse 20000 ns)
+TB_NONE: 126.226900s, context=0,(0(0)-126:226900),CdhCore.cmdDisp.OpCodeDispatched,16777217,EventSeverity.COMMAND,Opcode 0x10018000 dispatched to port 10
+TB_NONE: 126.237000s, context=0,(0(0)-126:237000),CdhCore.cmdDisp.OpCodeCompleted,16777218,EventSeverity.COMMAND,Opcode 0x10018000 completed
+TB_NONE: 128.228700s, context=0,(0(0)-128:228700),ReferenceDeployment.fram.FramWritten,268537857,EventSeverity.ACTIVITY_HI,FRAM[0x100] <- 0xcafef00d
+TB_NONE: 128.237400s, context=0,(0(0)-128:237400),CdhCore.cmdDisp.OpCodeDispatched,16777217,EventSeverity.COMMAND,Opcode 0x10019000 dispatched to port 9
+TB_NONE: 128.247400s, context=0,(0(0)-128:247400),CdhCore.cmdDisp.OpCodeCompleted,16777218,EventSeverity.COMMAND,Opcode 0x10019000 completed
+TB_NONE: 130.028600s, context=0,(0(0)-130:28600),ReferenceDeployment.fram.FramValue,268537858,EventSeverity.ACTIVITY_HI,FRAM[0x100] = 0xcafef00d
+TB_NONE: 130.037000s, context=0,(0(0)-130:37000),CdhCore.cmdDisp.OpCodeDispatched,16777217,EventSeverity.COMMAND,Opcode 0x10019001 dispatched to port 9
+TB_NONE: 130.046900s, context=0,(0(0)-130:46900),CdhCore.cmdDisp.OpCodeCompleted,16777218,EventSeverity.COMMAND,Opcode 0x10019001 completed
+TB_NONE: 151.229100s, context=0,(0(0)-151:229100),ReferenceDeployment.detumble.ModeChanged,268541952,EventSeverity.ACTIVITY_HI,Detumble ON (gain 100.0 %/(uT/s))
+TB_NONE: 151.239000s, context=0,(0(0)-151:239000),CdhCore.cmdDisp.OpCodeDispatched,16777217,EventSeverity.COMMAND,Opcode 0x1001a000 dispatched to port 7
+TB_NONE: 151.249000s, context=0,(0(0)-151:249000),CdhCore.cmdDisp.OpCodeCompleted,16777218,EventSeverity.COMMAND,Opcode 0x1001a000 completed
+TB_NONE: 151.328900s, context=0,(0(0)-151:328900),ReferenceDeployment.mtq.BridgeEnabled,268533761,EventSeverity.ACTIVITY_HI,MTQ H-bridges enabled: True
+TB_NONE: 242.929000s, context=0,(0(0)-242:929000),ReferenceDeployment.mtq.BridgeEnabled,268533761,EventSeverity.ACTIVITY_HI,MTQ H-bridges enabled: False
+TB_NONE: 242.937800s, context=0,(0(0)-242:937800),ReferenceDeployment.detumble.ModeChanged,268541952,EventSeverity.ACTIVITY_HI,Detumble OFF (gain 100.0 %/(uT/s))
+TB_NONE: 242.948000s, context=0,(0(0)-242:948000),CdhCore.cmdDisp.OpCodeDispatched,16777217,EventSeverity.COMMAND,Opcode 0x1001a001 dispatched to port 7
+TB_NONE: 242.958000s, context=0,(0(0)-242:958000),CdhCore.cmdDisp.OpCodeCompleted,16777218,EventSeverity.COMMAND,Opcode 0x1001a001 completed

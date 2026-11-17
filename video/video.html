@@ -1,0 +1,166 @@
+<!doctype html><meta charset="utf-8">
+<!-- F Prime demo video (Simantic video kit). ./make.sh fetches the kit into .kit/, writes
+     data.js from the recorded runs and renders video.mp4. Open this page in a browser to play it; ?t=20 holds a frame. -->
+<link rel="stylesheet" href=".kit/assets/base.css"><link rel="stylesheet" href=".kit/assets/video.css">
+<style>
+.box { padding: 18px 24px; } .box .k { font: 500 17px var(--mono); color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+.box .v { font: 500 30px/1.25 var(--sans); margin-top: 6px; } .box .s { font: 400 21px/1.3 var(--sans); color: var(--muted); margin-top: 4px; }
+.simbox { border: 2px dashed var(--sim); border-radius: 6px; background: var(--sim-tint, #e4efec); }
+.simbox .k { color: var(--sim); }
+.wire { position: absolute; height: 2px; background: var(--ink); }
+.wire.sim { background: var(--sim); }
+.bus { position: absolute; font: 500 19px var(--mono); color: var(--muted); }
+.legend { font: 400 21px var(--sans); color: var(--muted); display: flex; gap: 34px; }
+.legend span { display: flex; align-items: center; gap: 10px; } .legend i { width: 22px; height: 14px; border-radius: 3px; display: block; }
+.sbar { position: absolute; bottom: 0; width: 110px; background: var(--sim); border-radius: 3px 3px 0 0; }
+.barv { position: absolute; width: 150px; text-align: center; font: 500 22px var(--mono); }
+.barl { position: absolute; width: 150px; text-align: center; font: 500 19px var(--mono); color: var(--muted); }
+.res { font: 500 34px var(--mono); margin-top: 4px; }
+.fault { display: grid; grid-template-columns: 300px 1fr; align-items: center; padding: 20px 26px; }
+.fault .kind { font: 500 22px var(--mono); color: var(--red); } .fault .what { font: 400 21px var(--sans); color: var(--muted); margin-top: 4px; }
+.fault .line { font: 400 22px/1.6 var(--mono); } .fault .line b { font-weight: 600; }
+</style>
+<body>
+<script src="data.js"></script><script src=".kit/assets/video.js"></script>
+<script>
+const D = window.DATA;   // every number on screen comes from data.js (collect.py, from the recorded runs)
+const ROWS = D.orbit, MAXMV = 2600;
+const rowAt = vt => { let i = 0; while (i + 1 < ROWS.length && ROWS[i + 1].t <= vt) i++; return i; };
+
+// six sun-sensor bars plus the power readouts; p prefixes ids so two scenes can share the layout
+const panelsHTML = p => `
+  <div class="abs" style="left:0;top:0;width:900px;height:520px">
+    ${[0,1,2,3,4,5].map(i => `<div class="sbar" id="${p}-b${i}" style="left:${i*150+20}px"></div>
+      <div class="barv" id="${p}-v${i}" style="left:${i*150}px"></div>
+      <div class="barl" style="left:${i*150}px;bottom:-34px">PAN${i+1}</div>`).join("")}
+  </div>
+  <div class="abs label" style="left:0;top:600px">Sun sensors, mV (the firmware's own ADC readings)</div>
+  <div class="abs card stack counter" style="left:1060px;top:0;width:640px" id="${p}-card">
+    <div class="k">Firmware clock</div><div class="v" id="${p}-t"></div>
+    <div class="k">Battery current</div><div class="v" id="${p}-i"></div>
+    <div class="k">Battery voltage</div><div class="v" id="${p}-u"></div>
+  </div>
+  <svg class="abs" style="left:1060px;top:310px" width="700" height="370" viewBox="0 0 700 370" id="${p}-orb">
+    <rect x="300" y="105" width="400" height="160" fill="#e6e6df"/>
+    <text x="560" y="192" font-family="var(--mono)" font-size="17" fill="#606060" text-anchor="middle">EARTH'S SHADOW</text>
+    <g stroke="#111" stroke-width="2"><line x1="8" y1="185" x2="70" y2="185"/><line x1="8" y1="150" x2="58" y2="150"/><line x1="8" y1="220" x2="58" y2="220"/></g>
+    <text x="8" y="130" font-family="var(--mono)" font-size="17" fill="#606060">SUN</text>
+    <circle cx="300" cy="185" r="150" fill="none" stroke="#111" stroke-width="1.5" stroke-dasharray="5 7"/>
+    <circle cx="300" cy="185" r="80" fill="#fff" stroke="#111" stroke-width="2"/>
+    <text x="300" y="191" font-family="var(--sans)" font-size="22" fill="#111" text-anchor="middle">Earth</text>
+    <g id="${p}-sat"><rect x="-13" y="-13" width="26" height="26" rx="2" fill="var(--sim)" stroke="#111" stroke-width="1.5" id="${p}-satb"/></g>
+    <text x="8" y="362" font-family="var(--sans)" font-size="17" fill="#8a8a84">illustration, not to scale</text>
+  </svg>`;
+function drawPanels(p, vt) {
+  const i = rowAt(vt), r = ROWS[i], prev = ROWS[Math.max(i - 1, 0)], next = ROWS[Math.min(i + 1, ROWS.length - 1)];
+  const x = ease(prog(vt, r.t, r.t + 0.35 * Math.max(next.t - r.t, 1)));   // bars settle on each telemetry row
+  r.sun.forEach((mv, k) => {
+    const h = lerp(prev.sun[k], mv, i ? x : 1) / MAXMV * 480;
+    $(`#${p}-b${k}`).style.height = h + "px";
+    const v = $(`#${p}-v${k}`); v.textContent = mv; v.style.bottom = (h + 10) + "px";
+  });
+  const tE = (lastLit.t + firstDark.t) / 2, edge = Math.asin(80 / 150) * 180 / Math.PI;
+  const ang = (edge + (tE - vt) * (140 - edge) / (tE - ROWS[0].t)) * Math.PI / 180;
+  const dark = vt >= tE;
+  $(`#${p}-sat`).setAttribute("transform", `translate(${300 + 150 * Math.cos(ang)} ${185 - 150 * Math.sin(ang)}) rotate(${vt * 3})`);
+  $(`#${p}-satb`).setAttribute("fill", dark ? "#9fbdb9" : "var(--sim)");
+  $(`#${p}-t`).innerHTML = r.t + "<small> s</small>";
+  $(`#${p}-i`).innerHTML = (r.ibat > 0 ? "+" : "") + r.ibat + "<small> mA " + (r.ibat > 0 ? "charging" : "discharging") + "</small>";
+  $(`#${p}-u`).innerHTML = (r.vbat / 1000).toFixed(3) + "<small> V</small>";
+}
+
+const lit = ROWS.filter(r => Math.max(...r.sun) > 0), dark = ROWS.filter(r => Math.max(...r.sun) == 0);
+const lastLit = lit[lit.length - 1], firstDark = dark[0];
+const evs = D.commands.flatMap(c => c.events.map(e => ({ ...e, cmd: c.cmd })));
+const T0 = evs[0].t - 0.4, T1 = evs[evs.length - 1].t + 0.2;
+const find = n => evs.find(e => e.name == n);
+const KIND = { FRAME_LOST: "A CAN frame is lost", CRC_ERROR: "The reply is corrupted", TIMEOUT: "The reply comes too late" };
+const pairs = [0, 2, 4].map(i => ({ retry: D.faults[i], ok: D.faults[i + 1], kind: D.faults[i].text.match(/(FRAME_LOST|CRC_ERROR|TIMEOUT)/)[1] }));
+
+Video({
+  title: `NASA F&nbsp;Prime flight software on a simulated ${D.board}`,
+  logo: ".kit/assets/logo-full.svg",
+  steps: [["setup", "Setup"], ["orbit", "Orbit"], ["eclipse", "Eclipse"], ["commands", "Commands"], ["faults", "Faults"]],
+  scenes: [
+    { key: "title", from: 0, to: 5,
+      html: `<div class="center title" style="bottom:-60px"><h1>NASA's F&nbsp;Prime flight software<br>in a simulated orbit</h1><p>The flight build runs unmodified on a simulated ${D.board}, with F&nbsp;Prime's own ground station attached.</p></div>`,
+      draw(t, a, e) { appear($("h1", e), t, a + 0.3, 0.8); appear($("p", e), t, a + 1.0, 0.8); } },
+
+    { key: "setup", from: 5, to: 15, step: "setup",
+      caption: ["Setup", "Real flight software, on a simulated dev board as the satellite computer.",
+        (t, a) => t < a + 5 ? "The firmware is the build that would be flashed: F&nbsp;Prime on Zephyr." : "Everything it talks to is simulated: power, memory, sensors, the orbit."],
+      html: `
+        <div class="abs legend" style="left:0;top:0" id="su-leg"><span><i style="background:#fff;border:1.5px solid var(--ink)"></i>real software, unchanged</span><span><i class="simbox"></i>simulated</span></div>
+        <div class="abs card box" style="left:0;top:250px;width:330px" id="su-gds"><div class="k">Ground station</div><div class="v">fprime-gds</div><div class="s">F&nbsp;Prime's stock ground software</div></div>
+        <div class="wire" style="left:330px;top:318px;width:190px" id="su-w0"></div><div class="bus" style="left:356px;top:280px" id="su-l0">UART ⇄ TCP</div>
+        <div class="abs simbox box" style="left:520px;top:110px;width:520px;height:420px" id="su-mcu"><div class="k">${D.board} · ${D.mcu} · simulated</div>
+          <div class="card stack box" style="margin-top:70px" id="su-fw"><div class="k">Firmware</div><div class="v">F&nbsp;Prime flight software</div><div class="s">rate groups, commands, telemetry, drivers</div></div></div>
+        ${[["CAN", "Power system + battery", "replies to housekeeping requests"], ["SPI", "FRAM", "keeps the boot count"],
+           ["I2C", "Magnetometer, accelerometer", "values from the orbit model"], ["ADC", "Sun sensors on 6 panels", "lit or dark by the orbit model"]]
+          .map(([bus, n, s], i) => `<div class="wire sim" style="left:1040px;top:${i*170+60}px;width:200px" id="su-w${i+1}"></div>
+            <div class="bus" style="left:1090px;top:${i*170+22}px" id="su-l${i+1}">${bus}</div>
+            <div class="abs simbox box" style="left:1240px;top:${i*170}px;width:520px;height:120px" id="su-p${i}"><div class="v" style="margin-top:0">${n}</div><div class="s">${s}</div></div>`).join("")}`,
+      draw(t, a) {
+        appear($("#su-leg"), t, a + 0.4); appear($("#su-mcu"), t, a + 0.6); appear($("#su-fw"), t, a + 1.2);
+        appear($("#su-gds"), t, a + 1.9); appear($("#su-w0"), t, a + 1.9); appear($("#su-l0"), t, a + 1.9);
+        for (let i = 0; i < 4; i++) { const at = a + 3.2 + i * 0.6; appear($("#su-p" + i), t, at); appear($("#su-w" + (i + 1)), t, at); appear($("#su-l" + (i + 1)), t, at); }
+      } },
+
+    { key: "orbit", from: 15, to: 25, step: "orbit",
+      caption: ["Orbit", "The satellite tumbles, and the sun sweeps across its panels.",
+        "Each bar is a reading the firmware took through its own ADC."],
+      html: panelsHTML("or"),
+      draw(t, a) { appear($("#or-card"), t, a + 0.4); drawPanels("or", lerp(ROWS[0].t, lastLit.t - 2, prog(t, a + 0.8, a + 8))); } },
+
+    { key: "eclipse", from: 25, to: 34, step: "eclipse",
+      caption: ["Eclipse", `At ${lastLit.t} s the satellite passes into Earth's shadow.`,
+        (t, a) => t < a + 4.5 ? "Every sun sensor drops to zero, and the battery starts to discharge." : "Nothing told the firmware: it saw the eclipse through its own sensors."],
+      html: panelsHTML("ec"),
+      draw(t, a) { drawPanels("ec", lerp(lastLit.t - 2, dark[dark.length - 1].t, prog(t, a + 0.8, a + 6.5))); } },
+
+    { key: "commands", from: 34, to: 46, step: "commands",
+      caption: ["Commands", "Commands go up the ground link and through F&nbsp;Prime's dispatcher.",
+        (t, a) => t < a + 6 ? "Each reaches its component, which talks to the hardware and reports back." : "Times are the firmware's own clock: simulated time."],
+      html: `<div class="abs card stack term" style="left:0;top:0;width:1120px;height:100%"><div class="bar"><span class="dot sim"></span>F&nbsp;Prime events, as the ground station received them</div>
+             <div class="body"><pre id="co-p"></pre></div></div>
+             <div class="abs card box" style="left:1190px;top:0;width:570px" id="co-r0"><div class="k">Ping the power system over CAN</div><div class="res" id="co-v0"></div></div>
+             <div class="abs card box" style="left:1190px;top:170px;width:570px" id="co-r1"><div class="k">Magnetorquer Y, PWM</div><div class="res" id="co-v1"></div></div>
+             <div class="abs card box" style="left:1190px;top:340px;width:570px" id="co-r2"><div class="k">Write, then read FRAM over SPI</div><div class="res" id="co-v2"></div></div>`,
+      setup() {
+        $("#co-v0").textContent = "reply in " + find("PingReply").text.match(/(\d+ ms)/)[1];
+        $("#co-v1").textContent = find("DutySet").text.match(/(\d+%)/)[1] + " duty";
+        $("#co-v2").textContent = find("FramValue").text.match(/= (0x[0-9a-f]+)/)[1];
+      },
+      draw(t, a) {
+        const vt = lerp(T0, T1, prog(t, a + 0.8, a + 8.5));
+        let seen = new Set(), out = [];
+        for (const e of evs.filter(e => e.t <= vt)) {
+          if (!seen.has(e.cmd)) { seen.add(e.cmd); out.push(`<span class="k">&gt; ${e.cmd}</span>`); }
+          const key = ["PingReply", "DutySet", "FramWritten", "FramValue"].includes(e.name);
+          out.push(`<span class="ts">${e.t.toFixed(3).padStart(8)} s</span>  ${key ? `<span class="k">${e.name.padEnd(17)}</span>` : e.name.padEnd(17)} ${e.text}`);
+        }
+        $("#co-p").innerHTML = out.join("\n");
+        [["PingReply", 0], ["DutySet", 1], ["FramValue", 2]].forEach(([n, i]) => appear($("#co-r" + i), t, a + 0.8 + (find(n).t - T0) / (T1 - T0) * 7.7));
+      } },
+
+    { key: "faults", from: 46, to: 57, step: "faults",
+      caption: ["Faults", "Three power-system replies are damaged on the CAN bus.",
+        (t, a) => t < a + 5.5 ? "Failures you cannot make a real power system produce on cue." : "The firmware retries each one and recovers. None is lost."],
+      html: `${pairs.map((p, i) => `<div class="abs card fault" style="left:0;top:${i*190}px;width:1120px" id="fa-${i}">
+               <div><div class="kind">${p.kind}</div><div class="what">${KIND[p.kind]}</div></div>
+               <div><div class="line"><span class="ts" style="color:var(--sim)">${p.retry.t.toFixed(3)} s</span>  HkRetry      attempt 1 failed, retrying</div>
+                    <div class="line" id="fa-ok${i}"><span class="ts" style="color:var(--sim)">${p.ok.t.toFixed(3)} s</span>  <b>HkRecovered</b>  ok on attempt 2</div></div></div>`).join("")}
+             <div class="abs" style="left:1220px;top:120px" id="fa-big"><div class="label">Recovered</div><div class="bignum">${pairs.length}<small>of ${D.hk_retries}</small></div>
+               <div class="s" style="font:400 24px var(--sans);color:var(--muted);margin-top:16px">hk_retries = ${D.hk_retries}, no HkFailed</div></div>`,
+      draw(t, a) {
+        pairs.forEach((p, i) => { appear($("#fa-" + i), t, a + 0.6 + i * 1.6); appear($("#fa-ok" + i), t, a + 1.4 + i * 1.6); });
+        appear($("#fa-big"), t, a + 6.2, 0.7);
+      } },
+
+    { key: "end", from: 57, to: 62,
+      html: `<div class="center end" style="bottom:-100px"><img src=".kit/assets/logo-full.svg"><p>Real firmware. Simulated hardware.</p><div class="u">simantic.com</div></div>`,
+      draw(t, a, e) { appear($("img", e), t, a + 0.4, 0.8); appear($("p", e), t, a + 1.0, 0.8); appear($(".u", e), t, a + 1.6, 0.8); } },
+  ],
+});
+</script>
+</body>
