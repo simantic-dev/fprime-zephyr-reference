@@ -9,16 +9,16 @@ window.DATA = {
    "vbat": 7754,
    "ibat": 333,
    "sun": [
-    2296,
+    2302,
     0,
     0,
-    1215,
+    1203,
     0,
     1499
    ],
    "bright": 1,
    "mag": [
-    -3.2,
+    -3.1,
     1.7,
     -45.2
    ]
@@ -28,18 +28,18 @@ window.DATA = {
    "vbat": 7755,
    "ibat": 332,
    "sun": [
-    1380,
+    1392,
     0,
     0,
-    2200,
+    2193,
     0,
     1499
    ],
    "bright": 4,
    "mag": [
-    -1.5,
-    2.3,
-    -45.2
+    -1.4,
+    2.4,
+    -45.1
    ]
   },
   {
@@ -47,18 +47,18 @@ window.DATA = {
    "vbat": 7746,
    "ibat": 235,
    "sun": [
-    95,
+    108,
     0,
     0,
-    2596,
+    2595,
     0,
     1499
    ],
    "bright": 4,
    "mag": [
-    -0.1,
-    2.0,
-    -45.1
+    0.0,
+    2.1,
+    -45.0
    ]
   },
   {
@@ -68,16 +68,16 @@ window.DATA = {
    "sun": [
     0,
     0,
-    1215,
-    2296,
+    1203,
+    2302,
     0,
     1499
    ],
    "bright": 4,
    "mag": [
-    0.6,
-    1.1,
-    -45.0
+    0.7,
+    1.2,
+    -44.9
    ]
   },
   {
@@ -87,16 +87,16 @@ window.DATA = {
    "sun": [
     0,
     0,
-    2200,
-    1380,
+    2193,
+    1392,
     0,
     1499
    ],
    "bright": 3,
    "mag": [
-    0.4,
-    0.2,
-    -44.9
+    0.5,
+    0.3,
+    -44.8
    ]
   },
   {
@@ -106,16 +106,16 @@ window.DATA = {
    "sun": [
     0,
     0,
-    2596,
-    95,
+    2595,
+    108,
     0,
     1499
    ],
    "bright": 3,
    "mag": [
-    -0.3,
-    0.0,
-    -44.8
+    -0.2,
+    0.1,
+    -44.7
    ]
   },
   {
@@ -124,17 +124,17 @@ window.DATA = {
    "ibat": 333,
    "sun": [
     0,
-    1215,
-    2296,
+    1203,
+    2302,
     0,
     0,
     1499
    ],
    "bright": 3,
    "mag": [
-    -0.9,
+    -0.8,
     0.5,
-    -44.6
+    -44.5
    ]
   },
   {
@@ -143,17 +143,17 @@ window.DATA = {
    "ibat": 332,
    "sun": [
     0,
-    2200,
-    1380,
+    2193,
+    1392,
     0,
     0,
     1499
    ],
    "bright": 2,
    "mag": [
-    -1.0,
-    1.5,
-    -44.5
+    -0.9,
+    1.6,
+    -44.4
    ]
   },
   {
@@ -162,17 +162,17 @@ window.DATA = {
    "ibat": 259,
    "sun": [
     0,
-    2572,
-    366,
+    2570,
+    379,
     0,
     0,
     1499
    ],
    "bright": 2,
    "mag": [
-    -0.4,
-    2.4,
-    -44.3
+    -0.3,
+    2.5,
+    -44.2
    ]
   },
   {
@@ -181,8 +181,8 @@ window.DATA = {
    "ibat": 246,
    "sun": [
     0,
-    2587,
-    230,
+    2586,
+    244,
     0,
     0,
     1499
@@ -200,17 +200,17 @@ window.DATA = {
    "ibat": -195,
    "sun": [
     0,
-    2596,
-    95,
+    2595,
+    108,
     0,
     0,
     1499
    ],
    "bright": 2,
    "mag": [
-    -0.1,
-    2.6,
-    -44.3
+    0.0,
+    2.7,
+    -44.2
    ]
   },
   {
@@ -247,7 +247,7 @@ window.DATA = {
    "bright": 1,
    "mag": [
     0.2,
-    2.7,
+    2.8,
     -44.2
    ]
   },
@@ -265,9 +265,9 @@ window.DATA = {
    ],
    "bright": 1,
    "mag": [
-    1.5,
+    1.6,
     3.0,
-    -44.1
+    -44.0
    ]
   },
   {
@@ -284,9 +284,9 @@ window.DATA = {
    ],
    "bright": 1,
    "mag": [
-    3.4,
-    2.2,
-    -43.9
+    3.5,
+    2.3,
+    -43.8
    ]
   },
   {
@@ -303,8 +303,8 @@ window.DATA = {
    ],
    "bright": 1,
    "mag": [
-    4.8,
-    0.2,
+    4.9,
+    0.3,
     -43.6
    ]
   }
@@ -315,19 +315,19 @@ window.DATA = {
    "cmd": "eps.EPS_PING",
    "events": [
     {
-     "t": 124.22,
+     "t": 123.239,
      "name": "OpCodeDispatched",
-     "text": "Opcode 0x10016000 dispatched to port 8"
+     "text": "Opcode 0x10017000 dispatched to port 8"
     },
     {
-     "t": 124.229,
-     "name": "PingReply",
-     "text": "EPS ping reply in 11 ms"
-    },
-    {
-     "t": 124.238,
+     "t": 123.248,
      "name": "OpCodeCompleted",
-     "text": "Opcode 0x10016000 completed"
+     "text": "Opcode 0x10017000 completed"
+    },
+    {
+     "t": 123.337,
+     "name": "PingReply",
+     "text": "EPS ping reply in 99 ms"
     }
    ]
   },
@@ -335,19 +335,19 @@ window.DATA = {
    "cmd": "mtq.MTQ_SET Y 40",
    "events": [
     {
-     "t": 126.218,
+     "t": 124.737,
      "name": "DutySet",
      "text": "MTQ Y duty 40% (pulse 20000 ns)"
     },
     {
-     "t": 126.227,
+     "t": 124.746,
      "name": "OpCodeDispatched",
-     "text": "Opcode 0x10018000 dispatched to port 10"
+     "text": "Opcode 0x10019000 dispatched to port 10"
     },
     {
-     "t": 126.237,
+     "t": 124.756,
      "name": "OpCodeCompleted",
-     "text": "Opcode 0x10018000 completed"
+     "text": "Opcode 0x10019000 completed"
     }
    ]
   },
@@ -355,19 +355,19 @@ window.DATA = {
    "cmd": "fram.FRAM_WRITE 0x100 0xCAFEF00D",
    "events": [
     {
-     "t": 128.229,
+     "t": 126.137,
      "name": "FramWritten",
      "text": "FRAM[0x100] <- 0xcafef00d"
     },
     {
-     "t": 128.237,
+     "t": 126.146,
      "name": "OpCodeDispatched",
-     "text": "Opcode 0x10019000 dispatched to port 9"
+     "text": "Opcode 0x1001a000 dispatched to port 9"
     },
     {
-     "t": 128.247,
+     "t": 126.156,
      "name": "OpCodeCompleted",
-     "text": "Opcode 0x10019000 completed"
+     "text": "Opcode 0x1001a000 completed"
     }
    ]
   },
@@ -375,19 +375,19 @@ window.DATA = {
    "cmd": "fram.FRAM_READ 0x100",
    "events": [
     {
-     "t": 130.029,
+     "t": 127.937,
      "name": "FramValue",
      "text": "FRAM[0x100] = 0xcafef00d"
     },
     {
-     "t": 130.037,
+     "t": 127.945,
      "name": "OpCodeDispatched",
-     "text": "Opcode 0x10019001 dispatched to port 9"
+     "text": "Opcode 0x1001a001 dispatched to port 9"
     },
     {
-     "t": 130.047,
+     "t": 127.955,
      "name": "OpCodeCompleted",
-     "text": "Opcode 0x10019001 completed"
+     "text": "Opcode 0x1001a001 completed"
     }
    ]
   }

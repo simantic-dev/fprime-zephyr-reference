@@ -7,6 +7,10 @@ no satellite.
 
 [![F´ demo video: 34 s, click to play](video/poster.png)](video/fprime-demo.mp4)
 
+Longer cut (59 s), from reset to orbit: what is in the firmware file, how it loads, the clock
+registers it writes at boot, and its 10 Hz and 1 Hz loops as the simulator timed them:
+[video/fprime-demo-long.mp4](video/fprime-demo-long.mp4).
+
 ```sh
 ./demo            # nominal: orbit, eclipse, commands, detumble
 ./demo faults     # the power system damages three replies; the firmware retries each one

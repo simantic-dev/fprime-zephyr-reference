@@ -1,0 +1,217 @@
+<!doctype html><meta charset="utf-8">
+<!-- F Prime demo video, long cut: firmware, load, boot, execute, observe, faults (Simantic video kit). ./make.sh fetches the kit into .kit/, writes
+     data.js from the recorded runs and renders video.mp4. Open this page in a browser to play it; ?t=20 holds a frame. -->
+<link rel="stylesheet" href=".kit/assets/base.css"><link rel="stylesheet" href=".kit/assets/video.css">
+<style>
+.box { padding: 18px 24px; } .box .k { font: 500 17px var(--mono); color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+.box .v { font: 500 30px/1.25 var(--sans); margin-top: 6px; } .box .s { font: 400 21px/1.3 var(--sans); color: var(--muted); margin-top: 4px; }
+.simbox { border: 2px dashed var(--sim); border-radius: 6px; background: var(--sim-tint, #e4efec); }
+.simbox .k { color: var(--sim); }
+.wire { position: absolute; height: 2px; background: var(--ink); }
+.wire.sim { background: var(--sim); }
+.bus { position: absolute; font: 500 19px var(--mono); color: var(--muted); }
+.legend { font: 400 21px var(--sans); color: var(--muted); display: flex; gap: 34px; }
+.legend span { display: flex; align-items: center; gap: 10px; } .legend i { width: 22px; height: 14px; border-radius: 3px; display: block; }
+.sbar { position: absolute; bottom: 0; width: 110px; background: var(--sim); border-radius: 3px 3px 0 0; }
+.barv { position: absolute; width: 150px; text-align: center; font: 500 22px var(--mono); }
+.barl { position: absolute; width: 150px; text-align: center; font: 500 19px var(--mono); color: var(--muted); }
+.res { font: 500 34px var(--mono); margin-top: 4px; }
+.fault { display: grid; grid-template-columns: 300px 1fr; align-items: center; padding: 20px 26px; }
+.fault .kind { font: 500 22px var(--mono); color: var(--red); } .fault .what { font: 400 21px var(--sans); color: var(--muted); margin-top: 4px; }
+.fault .line { font: 400 22px/1.6 var(--mono); } .fault .line b { font-weight: 600; }
+
+.elf .seg { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; padding: 15px 24px; border-top: 1px solid var(--line); font: 400 26px var(--sans); }
+.elf .seg i { width: 18px; height: 18px; border-radius: 3px; display: block; } .elf .seg span { font: 500 22px var(--mono); color: var(--muted); }
+.stackbar { display: flex; height: 70px; border: 1.5px solid var(--ink); border-radius: 5px; overflow: hidden; } .stackbar div { height: 100%; }
+.membar { position: relative; height: 96px; border: 1.5px solid var(--ink); border-radius: 6px; background: #fff; overflow: hidden; }
+.membar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: #e4efec; border-right: 2px solid var(--sim); }
+.membar .lbl { position: absolute; left: 24px; top: 20px; font: 500 28px var(--sans); } .membar .lbl span { font: 400 20px var(--mono); color: var(--muted); margin-left: 16px; }
+.membar .rt { position: absolute; right: 24px; top: 30px; font: 500 24px var(--mono); }
+.words { display: flex; gap: 14px; font: 500 30px var(--mono); } .words div { padding: 12px 18px; border: 1.5px solid var(--line); border-radius: 5px; background: #fff; color: var(--soft); }
+.words .hl { border-color: var(--sim); color: var(--ink); background: #e4efec; }
+.reg { padding: 18px 24px; } .reg .rk { font: 500 17px var(--mono); color: var(--muted); letter-spacing: 1px; } .reg .rv { font: 500 40px var(--mono); margin-top: 4px; }
+.node { border: 1.5px solid var(--ink); border-radius: 6px; background: #fff; padding: 12px 20px; min-width: 170px; } .node.out { background: #e4efec; border-color: var(--sim); }
+.node .nk { font: 500 16px var(--mono); color: var(--muted); letter-spacing: 1px; text-transform: uppercase; } .node .nv { font: 500 32px var(--mono); margin-top: 2px; }
+.regs { font: 400 22px/1.9 var(--mono); padding: 12px 24px 16px; white-space: pre; } .regs .w { font-weight: 600; } .regs .d { color: var(--soft); }
+.asm { font: 400 20px/1.72 var(--mono); padding: 10px 16px 12px; white-space: pre; } .asm div { padding: 0 10px; border-radius: 3px; } .asm .a { color: var(--soft); }
+.asm div.on { background: var(--sim); color: #fff; } .asm div.on .a { color: #cfe6e3; }
+</style>
+<body>
+<script src="data.js"></script><script src="fw.js"></script><script src=".kit/assets/video.js"></script>
+<script>
+const D = window.DATA;   // every number on screen comes from data.js (collect.py, from the recorded runs)
+const ROWS = D.orbit, MAXMV = 2600;
+const rowAt = vt => { let i = 0; while (i + 1 < ROWS.length && ROWS[i + 1].t <= vt) i++; return i; };
+
+// six sun-sensor bars plus the power readouts; p prefixes ids so two scenes can share the layout
+const panelsHTML = p => `
+  <div class="abs" style="left:0;top:0;width:900px;height:520px">
+    ${[0,1,2,3,4,5].map(i => `<div class="sbar" id="${p}-b${i}" style="left:${i*150+20}px"></div>
+      <div class="barv" id="${p}-v${i}" style="left:${i*150}px"></div>
+      <div class="barl" style="left:${i*150}px;bottom:-34px">PAN${i+1}</div>`).join("")}
+  </div>
+  <div class="abs label" style="left:0;top:600px">Sun sensors, mV (the firmware's own ADC readings)</div>
+  <div class="abs card stack counter" style="left:1060px;top:0;width:640px" id="${p}-card">
+    <div class="k">Firmware clock</div><div class="v" id="${p}-t"></div>
+    <div class="k">Battery current</div><div class="v" id="${p}-i"></div>
+    <div class="k">Battery voltage</div><div class="v" id="${p}-u"></div>
+  </div>
+  <svg class="abs" style="left:1060px;top:310px" width="700" height="370" viewBox="0 0 700 370" id="${p}-orb">
+    <rect x="300" y="105" width="400" height="160" fill="#e6e6df"/>
+    <text x="560" y="192" font-family="var(--mono)" font-size="17" fill="#606060" text-anchor="middle">EARTH'S SHADOW</text>
+    <g stroke="#111" stroke-width="2"><line x1="8" y1="185" x2="70" y2="185"/><line x1="8" y1="150" x2="58" y2="150"/><line x1="8" y1="220" x2="58" y2="220"/></g>
+    <text x="8" y="130" font-family="var(--mono)" font-size="17" fill="#606060">SUN</text>
+    <circle cx="300" cy="185" r="150" fill="none" stroke="#111" stroke-width="1.5" stroke-dasharray="5 7"/>
+    <circle cx="300" cy="185" r="80" fill="#fff" stroke="#111" stroke-width="2"/>
+    <text x="300" y="191" font-family="var(--sans)" font-size="22" fill="#111" text-anchor="middle">Earth</text>
+    <g id="${p}-sat"><rect x="-13" y="-13" width="26" height="26" rx="2" fill="var(--sim)" stroke="#111" stroke-width="1.5" id="${p}-satb"/></g>
+    <text x="8" y="362" font-family="var(--sans)" font-size="17" fill="#8a8a84">illustration, not to scale</text>
+  </svg>`;
+function drawPanels(p, vt) {
+  const i = rowAt(vt), r = ROWS[i], prev = ROWS[Math.max(i - 1, 0)], next = ROWS[Math.min(i + 1, ROWS.length - 1)];
+  const x = ease(prog(vt, r.t, r.t + 0.35 * Math.max(next.t - r.t, 1)));   // bars settle on each telemetry row
+  r.sun.forEach((mv, k) => {
+    const h = lerp(prev.sun[k], mv, i ? x : 1) / MAXMV * 480;
+    $(`#${p}-b${k}`).style.height = h + "px";
+    const v = $(`#${p}-v${k}`); v.textContent = mv; v.style.bottom = (h + 10) + "px";
+  });
+  const tE = (lastLit.t + firstDark.t) / 2, edge = Math.asin(80 / 150) * 180 / Math.PI;
+  const ang = (edge + (tE - vt) * (140 - edge) / (tE - ROWS[0].t)) * Math.PI / 180;
+  const dark = vt >= tE;
+  $(`#${p}-sat`).setAttribute("transform", `translate(${300 + 150 * Math.cos(ang)} ${185 - 150 * Math.sin(ang)}) rotate(${vt * 3})`);
+  $(`#${p}-satb`).setAttribute("fill", dark ? "#9fbdb9" : "var(--sim)");
+  $(`#${p}-t`).innerHTML = r.t + "<small> s</small>";
+  $(`#${p}-i`).innerHTML = (r.ibat > 0 ? "+" : "") + r.ibat + "<small> mA " + (r.ibat > 0 ? "charging" : "discharging") + "</small>";
+  $(`#${p}-u`).innerHTML = (r.vbat / 1000).toFixed(3) + "<small> V</small>";
+}
+
+const lit = ROWS.filter(r => Math.max(...r.sun) > 0), dark = ROWS.filter(r => Math.max(...r.sun) == 0);
+const lastLit = lit[lit.length - 1], firstDark = dark[0];
+const evs = D.commands.flatMap(c => c.events.map(e => ({ ...e, cmd: c.cmd })));
+const T0 = evs[0].t - 0.4, T1 = evs[evs.length - 1].t + 0.2;
+const find = n => evs.find(e => e.name == n);
+const KIND = { FRAME_LOST: "A CAN frame is lost", CRC_ERROR: "The reply is corrupted", TIMEOUT: "The reply comes too late" };
+const pairs = [0, 2, 4].map(i => ({ retry: D.faults[i], ok: D.faults[i + 1], kind: D.faults[i].text.match(/(FRAME_LOST|CRC_ERROR|TIMEOUT)/)[1] }));
+
+const F = window.FW, kb = n => (n / 1024).toFixed(0) + " KB", hex = (n, w = 8) => "0x" + n.toString(16).padStart(w, "0").replace(/(....)(....)/, "$1_$2");
+const word = n => n.toString(16).padStart(8, "0").replace(/(....)(....)/, "$1 $2");
+const SEGS = [["#111", "Zephyr RTOS, drivers, C library", F.code.zephyr], ["#8a8a84", "F&nbsp;Prime framework", F.code.fprime],
+              ["var(--sim)", "Satellite components", F.code.satellite], ["#d9d9d3", "Constants and tables", F.sections.rodata]];
+const SEGSUM = SEGS.reduce((s, x) => s + x[2], 0);
+const LOOPS = [["EpsCan", "eps.run", "10 Hz"], ["Detumble", "detumble.run", "10 Hz"], ["Adcs", "adcs.run", "1 Hz"], ["FramParams", "fram.run", "1 Hz"]];
+const LW0 = F.boot.first_cycle - 0.08, LW1 = F.loops.Adcs[2] + 0.15;
+
+// The two rate groups as a timeline: one lane per handler, a tick at each arrival the simulator logged.
+function drawLoops(vt) {
+  const X0 = 300, X1 = 1220, x = t => X0 + (t - LW0) / (LW1 - LW0) * (X1 - X0), ly = i => 50 + i * 105, on = t => t <= vt;
+  const T = (xx, y, txt, o = "") => `<text class="m" x="${xx}" y="${y}" font-family="var(--mono)" font-size="20" ${o}>${txt}</text>`;
+  let g = "";
+  LOOPS.forEach(([k, name, hz], i) => {
+    g += `<text x="0" y="${ly(i) + 2}" font-family="var(--mono)" font-size="21" fill="#111">${name}</text><text x="0" y="${ly(i) + 28}" font-family="var(--mono)" font-size="17" fill="#8a8a84">${hz}</text>
+          <line x1="${X0}" y1="${ly(i)}" x2="${X1}" y2="${ly(i)}" stroke="#d9d9d3" stroke-width="2"/>`;
+    F.loops[k].forEach(t => { if (t <= LW1 && on(t)) g += `<rect class="m" x="${x(t) - 4}" y="${ly(i) - 20}" width="8" height="40" rx="1" fill="${i < 2 ? "#111" : "var(--sim)"}"/>`; });
+  });
+  for (let s = Math.ceil(LW0 * 2) / 2; s <= LW1; s += 0.5) g += `<text x="${x(s)}" y="${ly(3) + 66}" font-family="var(--mono)" font-size="18" fill="#8a8a84" text-anchor="middle">${s.toFixed(1)} s</text>`;
+  const gap = (i, a, b) => { if (!on(b)) return; const ms = Math.round((b - a) * 1000);
+    g += `<path d="M${x(a)},${ly(i) + 30} v8 H${x(b)} v-8" fill="none" stroke="var(--sim)" stroke-width="2"/>` + T((x(a) + x(b)) / 2, ly(i) + 64, ms + " ms", 'fill="var(--sim)" text-anchor="middle"'); };
+  gap(0, F.loops.EpsCan[4], F.loops.EpsCan[5]); gap(2, F.loops.Adcs[1], F.loops.Adcs[2]);
+  $("#ex-tl").innerHTML = g;
+  const bs = [...$("#ex-tl").querySelectorAll(".m")].map(e => [e, e.getBBox()]);   // no two marks or labels may overlap
+  for (let i = 0; i < bs.length; i++) for (let j = i + 1; j < bs.length; j++) { const a = bs[i][1], b = bs[j][1];
+    if (a.x < b.x + b.width - 1 && b.x < a.x + a.width - 1 && a.y < b.y + b.height - 1 && b.y < a.y + a.height - 1) throw new Error(`loop timeline overlap at vt=${vt.toFixed(3)}`); }
+}
+const orbitVt = (t, a) => lerp(ROWS[0].t, dark[dark.length - 1].t, prog(t, a + 0.5, a + 7.2));
+
+Video({
+  title: `NASA F&nbsp;Prime flight software on a simulated ${D.board}`,
+  logo: ".kit/assets/logo-full.svg",
+  steps: [["fw", "Firmware"], ["load", "Load"], ["boot", "Boot"], ["exec", "Execute"], ["obs", "Observe"], ["faults", "Faults"]],
+  scenes: [
+    { key: "title", from: 0, to: 4,
+      html: `<div class="center title" style="bottom:-60px"><h1>NASA's F&nbsp;Prime flight software<br>in a simulated orbit</h1><p>How the simulator runs the real flight build for an ${D.mcu}, from reset to orbit, with no hardware.</p></div>`,
+      draw(t, a, e) { appear($("h1", e), t, a + 0.3, 0.8); appear($("p", e), t, a + 1.0, 0.8); } },
+
+    { key: "fw", from: 4, to: 11, step: "fw",
+      caption: ["The firmware", "One compiled file holds Zephyr, F&nbsp;Prime and the satellite's own code.", "It is the same file you would flash onto the board."],
+      html: `<div class="abs card stack elf" style="left:0;top:0;width:900px"><div class="bar"><span class="dot"></span>fprime-demo.elf<span class="sub">${fmt(F.flash.used)} bytes of flash</span></div>
+               ${SEGS.map(([c, n, v], i) => `<div class="seg" id="fw-s${i}"><i style="background:${c}"></i><div>${n}</div><span>${kb(v)}</span></div>`).join("")}</div>
+             <div class="abs" style="left:980px;top:40px;width:780px" id="fw-b"><div class="label">Share of the file</div>
+               <div class="stackbar" style="margin-top:14px">${SEGS.map(([c, n, v], i) => `<div id="fw-p${i}" style="background:${c};width:0"></div>`).join("")}</div></div>`,
+      draw(t, a) {
+        SEGS.forEach(([c, n, v], i) => { appear($("#fw-s" + i), t, a + 0.6 + i * 0.7); $("#fw-p" + i).style.width = (v / SEGSUM * 100 * out3(prog(t, a + 0.6 + i * 0.7, a + 1.4 + i * 0.7))) + "%"; });
+        appear($("#fw-b"), t, a + 0.4);
+      } },
+
+    { key: "load", from: 11, to: 18, step: "load",
+      caption: ["Load", "The simulator places the file in a model of the chip's memory.", "Reset reads the stack pointer and the start address from the first two words, as the chip does."],
+      html: `<div class="abs" style="left:0;right:0;top:10px"><div class="membar"><div class="fill" id="ld-f"></div><div class="lbl">Flash<span>${hex(F.flash.base)} · ${F.flash.size / 1048576} MB</span></div><div class="rt" id="ld-ft"></div></div>
+               <div class="membar" style="margin-top:18px"><div class="fill" id="ld-r"></div><div class="lbl">RAM<span>${hex(F.ram.base)} · ${F.ram.size / 1024} KB</span></div><div class="rt" id="ld-rt"></div></div></div>
+             <div class="abs" style="left:0;top:300px" id="ld-w"><div class="label" style="margin-bottom:12px">First words of flash</div>
+               <div class="words"><div class="hl">${word(F.vectors.sp)}</div><div class="hl">${word(F.vectors.reset)}</div><div>…</div></div></div>
+             <svg class="abs" style="left:560px;top:345px" width="90" height="30" fill="none" stroke="#347d79" stroke-width="2" id="ld-a"><path d="M0 15H80M68 5l12 10-12 10"/></svg>
+             <div class="abs card stack reg" style="left:690px;top:290px;width:480px" id="ld-sp"><div class="rk">STACK POINTER</div><div class="rv">${hex(F.vectors.sp)}</div></div>
+             <div class="abs card stack reg" style="left:1220px;top:290px;width:480px" id="ld-pc"><div class="rk">PROGRAM COUNTER</div><div class="rv">${hex(F.vectors.reset & ~1)}</div></div>`,
+      draw(t, a) {
+        const p = out3(prog(t, a + 0.6, a + 2.6));
+        $("#ld-f").style.width = (F.flash.used / F.flash.size * 100 * p) + "%"; $("#ld-ft").textContent = fmt(Math.round(F.flash.used * p)) + " bytes";
+        $("#ld-r").style.width = (F.ram.used / F.ram.size * 100 * p) + "%"; $("#ld-rt").textContent = fmt(Math.round(F.ram.used * p)) + " bytes reserved";
+        appear($("#ld-w"), t, a + 3.0); appear($("#ld-a"), t, a + 3.7); appear($("#ld-sp"), t, a + 3.9); appear($("#ld-pc"), t, a + 4.3);
+      } },
+
+    { key: "boot", from: 18, to: 26, step: "boot",
+      caption: ["Boot", "The firmware sets up its own clocks. The model follows the registers.",
+        `${F.boot.rcc_writes} writes to the clock controller, then main() at ${(F.boot.main * 1000).toFixed(1)} ms of simulated time.`],
+      html: `<div class="abs" style="left:0;top:10px;display:flex;align-items:center;gap:18px" id="bt-c">
+               ${[["Board clock", F.clock.hse / 1e6 + " MHz"], ["Divide M", "÷ " + F.clock.divm], ["PLL1 × N", "× " + F.clock.n], ["Divide P", "÷ " + F.clock.p], ["Core clock", F.clock.sysclk / 1e6 + " MHz"]]
+                 .map(([k, v], i) => `${i ? `<svg id="bt-a${i}" width="34" height="14" viewBox="0 0 26 14"><path d="M0 7h23M17 1.5 23.5 7 17 12.5" fill="none" stroke="#111" stroke-width="1.4"/></svg>` : ""}<div class="node${i == 4 ? " out" : ""}" id="bt-n${i}"><div class="nk">${k}</div><div class="nv">${v}</div></div>`).join("")}</div>
+             <div class="abs card stack" style="left:0;top:190px;width:1120px"><div class="bar"><span class="dot sim"></span>Registers written by the firmware<span class="sub">RCC, the clock controller</span></div>
+               <div class="regs">${F.clock.regs.map(([r, v, c], i) => `<div id="bt-l${i}"><span class="w">${r.padEnd(14)}</span>← ${v.padEnd(20)}<span class="d">${c}</span></div>`).join("")}</div></div>
+             <div class="abs" style="left:1240px;top:220px" id="bt-f"><div class="label">Core clock</div><div class="bignum">${F.clock.sysclk / 1e6}<small>MHz</small></div></div>`,
+      draw(t, a) {
+        for (let i = 0; i < 5; i++) { appear($("#bt-l" + i), t, a + 0.8 + i * 0.8); appear($("#bt-n" + i), t, a + 0.8 + i * 0.8); if (i) appear($("#bt-a" + i), t, a + 0.8 + i * 0.8); }
+        appear($("#bt-f"), t, a + 4.6, 0.7);
+      } },
+
+    { key: "exec", from: 26, to: 38, step: "exec",
+      caption: ["Execute", "F&nbsp;Prime's rate groups run the satellite: ten times a second, and once a second.",
+        (t, a) => t < a + 6 ? "Each tick is a handler starting, at the simulated time the simulator logged." : "Inside detumble.run: the loop that turns magnetometer readings into dB/dt, as compiled."],
+      html: `<div class="abs card stack" style="left:0;top:0;width:440px"><div class="bar"><span class="dot sim"></span>detumble.run, filter loop<span class="sub">Thumb-2</span></div>
+               <div class="asm">${F.loop_asm.map((l, i) => `<div id="ex-a${i}"><span class="a">${l.addr.slice(-4)}</span>  ${l.text.replace(/^(\S+) /, (m, o) => o.padEnd(7)).replace(/ 80[0-9a-f]{5} /, " ")}</div>`).join("")}</div></div>
+             <svg class="abs" id="ex-tl" style="left:520px;top:10px" width="1240" height="460"></svg>
+             <div class="abs card counter" style="left:520px;top:500px;width:520px"><div class="k">Rate-group cycles run</div><div class="v" id="ex-n" style="margin:0"></div></div>
+             <div class="abs card counter" style="left:1080px;top:500px;width:520px"><div class="k">Simulated time</div><div class="v" id="ex-t" style="margin:0"></div></div>`,
+      draw(t, a) {
+        const vt = lerp(LW0, LW1, prog(t, a + 0.6, a + 9.5));
+        drawLoops(vt);
+        $("#ex-n").textContent = F.loops.EpsCan.filter(x => x <= vt).length;
+        $("#ex-t").innerHTML = vt.toFixed(3) + "<small> s</small>";
+        const on = t < a + 6 ? -1 : Math.floor((t - a - 6) * 9) % F.loop_asm.length;
+        F.loop_asm.forEach((l, i) => $("#ex-a" + i).className = i == on ? "on" : "");
+      } },
+
+    { key: "obs", from: 38, to: 48, step: "obs",
+      caption: ["Observe", "In orbit: the sun sweeps across the panels, then Earth's shadow.",
+        (t, a) => orbitVt(t, a) < lastLit.t + 0.5 ? "Each bar is a reading the firmware took through its own ADC." : `At ${lastLit.t} s every sensor reads zero and the battery discharges.`],
+      html: panelsHTML("or"),
+      draw(t, a) { appear($("#or-card"), t, a + 0.3); drawPanels("or", orbitVt(t, a)); } },
+
+    { key: "faults", from: 48, to: 55, step: "faults",
+      caption: ["Faults", "Three power-system replies are damaged on the CAN bus.", "The firmware retries each one and recovers. None is lost."],
+      html: `${pairs.map((p, i) => `<div class="abs card fault" style="left:0;top:${i*190}px;width:1120px" id="fa-${i}">
+               <div><div class="kind">${p.kind}</div><div class="what">${KIND[p.kind]}</div></div>
+               <div><div class="line"><span class="ts" style="color:var(--sim)">${p.retry.t.toFixed(3)} s</span>  HkRetry      attempt 1 failed, retrying</div>
+                    <div class="line" id="fa-ok${i}"><span class="ts" style="color:var(--sim)">${p.ok.t.toFixed(3)} s</span>  <b>HkRecovered</b>  ok on attempt 2</div></div></div>`).join("")}
+             <div class="abs" style="left:1220px;top:120px" id="fa-big"><div class="label">Recovered</div><div class="bignum">${pairs.length}<small>of ${D.hk_retries}</small></div>
+               <div class="s" style="font:400 24px var(--sans);color:var(--muted);margin-top:16px">hk_retries = ${D.hk_retries}, no HkFailed</div></div>`,
+      draw(t, a) {
+        pairs.forEach((p, i) => { appear($("#fa-" + i), t, a + 0.4 + i * 0.9); appear($("#fa-ok" + i), t, a + 0.9 + i * 0.9); });
+        appear($("#fa-big"), t, a + 3.6, 0.6);
+      } },
+
+    { key: "end", from: 55, to: 59,
+      html: `<div class="center end" style="bottom:-100px"><img src=".kit/assets/logo-full.svg"><p>Real firmware. Simulated hardware.</p><div class="u">simantic.com</div></div>`,
+      draw(t, a, e) { appear($("img", e), t, a + 0.3, 0.7); appear($("p", e), t, a + 0.8, 0.7); appear($(".u", e), t, a + 1.3, 0.7); } },
+  ],
+});
+</script>
+</body>

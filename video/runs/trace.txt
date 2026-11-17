@@ -1,0 +1,186 @@
+[0.003636265s] (TRACE) z_cstart pc=0x08007998
+[0.003720031s] (TRACE) stm32_clock_control_init pc=0x08005204
+[0.003720218s] (MEM) write addr=0x580244e0 width=4 value=0x2000000 pc=0x08005210
+[0.003720687s] (MEM) write addr=0x58024400 width=4 value=0x44025 pc=0x08005226
+[0.003720968s] (MEM) write addr=0x58024400 width=4 value=0x54025 pc=0x0800522e
+[0.003785437s] (MEM) write addr=0x58024474 width=4 value=0x1 pc=0x0800523e
+[0.003908062s] (MEM) write addr=0x58024470 width=4 value=0x0 pc=0x08005250
+[0.003908343s] (MEM) write addr=0x58024470 width=4 value=0x1 pc=0x08005258
+[0.128910750s] (MEM) write addr=0x58024400 width=4 value=0x75025 pc=0x0800526c
+[0.128914593s] (MEM) write addr=0x58024400 width=4 value=0x77025 pc=0x080052e0
+[0.128914875s] (MEM) write addr=0x58024400 width=4 value=0x77025 pc=0x080052e8
+[0.128915156s] (MEM) write addr=0x58024400 width=4 value=0x77025 pc=0x080052f0
+[0.128915453s] (MEM) write addr=0x58024428 width=4 value=0x2020202 pc=0x080052fc
+[0.128915750s] (MEM) write addr=0x58024428 width=4 value=0x2020042 pc=0x08005308
+[0.128916031s] (MEM) write addr=0x5802442c width=4 value=0x1ff0000 pc=0x08005310
+[0.128916312s] (MEM) write addr=0x5802442c width=4 value=0x1ff0002 pc=0x08005318
+[0.128916609s] (MEM) write addr=0x58024430 width=4 value=0x1010312 pc=0x08005324
+[0.128916890s] (MEM) write addr=0x5802442c width=4 value=0x1ff0002 pc=0x0800532c
+[0.128917171s] (MEM) write addr=0x58024430 width=4 value=0x1010112 pc=0x08005334
+[0.128917453s] (MEM) write addr=0x5802442c width=4 value=0x1ff0002 pc=0x0800533c
+[0.128917750s] (MEM) write addr=0x58024430 width=4 value=0x1030112 pc=0x08005348
+[0.128918031s] (MEM) write addr=0x5802442c width=4 value=0x1ff0002 pc=0x08005350
+[0.128918328s] (MEM) write addr=0x58024430 width=4 value=0x1030112 pc=0x0800535c
+[0.128918609s] (MEM) write addr=0x5802442c width=4 value=0x1ff0002 pc=0x08005364
+[0.128918890s] (MEM) write addr=0x58024400 width=4 value=0x1077025 pc=0x0800536c
+[0.128979312s] (MEM) write addr=0x58024428 width=4 value=0x2001042 pc=0x08005380
+[0.128979609s] (MEM) write addr=0x5802442c width=4 value=0x1ff0082 pc=0x0800538c
+[0.128979890s] (MEM) write addr=0x5802442c width=4 value=0x1ff0082 pc=0x08005394
+[0.128980187s] (MEM) write addr=0x58024438 width=4 value=0x1010209 pc=0x080053a0
+[0.128980468s] (MEM) write addr=0x5802442c width=4 value=0x1ff0082 pc=0x080053a8
+[0.128980750s] (MEM) write addr=0x58024438 width=4 value=0x1010009 pc=0x080053b0
+[0.128981031s] (MEM) write addr=0x5802442c width=4 value=0x1ff0082 pc=0x080053b8
+[0.128981312s] (MEM) write addr=0x58024438 width=4 value=0x1000009 pc=0x080053c0
+[0.128981593s] (MEM) write addr=0x5802442c width=4 value=0x1ff0082 pc=0x080053c8
+[0.128981875s] (MEM) write addr=0x58024438 width=4 value=0x9 pc=0x080053d0
+[0.128982156s] (MEM) write addr=0x5802442c width=4 value=0x1ff0082 pc=0x080053d8
+[0.128982437s] (MEM) write addr=0x58024400 width=4 value=0x7077025 pc=0x080053e0
+[0.129034359s] (MEM) write addr=0x58024418 width=4 value=0x0 pc=0x080053f6
+[0.129034671s] (MEM) write addr=0x58024418 width=4 value=0x8 pc=0x08005402
+[0.129035156s] (MEM) write addr=0x5802441c width=4 value=0x40 pc=0x0800540e
+[0.129035625s] (MEM) write addr=0x5802441c width=4 value=0x440 pc=0x0800541a
+[0.129036093s] (MEM) write addr=0x58024418 width=4 value=0x48 pc=0x08005426
+[0.129036562s] (MEM) write addr=0x58024420 width=4 value=0x40 pc=0x08005432
+[0.129037031s] (MEM) write addr=0x58024410 width=4 value=0x3 pc=0x0800543e
+[0.129037656s] (MEM) write addr=0x58024410 width=4 value=0x1b pc=0x08005464
+[0.129038009s] (MEM) write addr=0x580244e0 width=4 value=0x2000010 pc=0x0803dfba
+[0.129038213s] (MEM) write addr=0x580244e0 width=4 value=0x2000030 pc=0x0803dfba
+[0.129038413s] (MEM) write addr=0x580244e0 width=4 value=0x2000070 pc=0x0803dfba
+[0.129038609s] (MEM) write addr=0x580244e0 width=4 value=0x2000074 pc=0x0803dfba
+[0.129038805s] (MEM) write addr=0x580244e0 width=4 value=0x2000076 pc=0x0803dfba
+[0.129039005s] (MEM) write addr=0x580244f4 width=4 value=0x10002 pc=0x0803dfba
+[0.129039205s] (MEM) write addr=0x580244e0 width=4 value=0x2000077 pc=0x0803dfba
+[0.129039398s] (MEM) write addr=0x580244e0 width=4 value=0x20000f7 pc=0x0803dfba
+[0.129039594s] (MEM) write addr=0x580244e0 width=4 value=0x20001f7 pc=0x0803dfba
+[0.129039787s] (MEM) write addr=0x580244e0 width=4 value=0x20003f7 pc=0x0803dfba
+[0.129039984s] (MEM) write addr=0x580244e0 width=4 value=0x20007f7 pc=0x0803dfba
+[0.129040180s] (MEM) write addr=0x580244e0 width=4 value=0x20007ff pc=0x0803dfba
+[0.129041056s] (MEM) write addr=0x580244e8 width=4 value=0x20000 pc=0x0803dfba
+[0.129042224s] (MEM) write addr=0x58024490 width=4 value=0x20000 pc=0x0803e5c0
+[0.129042285s] (MEM) write addr=0x58024490 width=4 value=0x0 pc=0x0803e5de
+[0.129043322s] (MEM) write addr=0x580244e8 width=4 value=0x60000 pc=0x0803dfba
+[0.129044427s] (MEM) write addr=0x58024490 width=4 value=0x40000 pc=0x0803e5c0
+[0.129044474s] (MEM) write addr=0x58024490 width=4 value=0x0 pc=0x0803e5de
+[0.129045445s] (MEM) write addr=0x580244f4 width=4 value=0x1000a pc=0x0803dfba
+[0.129046514s] (MEM) write addr=0x5802449c width=4 value=0x8 pc=0x0803e5c0
+[0.129046562s] (MEM) write addr=0x5802449c width=4 value=0x0 pc=0x0803e5de
+[0.129048416s] (MEM) write addr=0x580244e0 width=4 value=0x120007ff pc=0x0803dfba
+[0.129059256s] (MEM) write addr=0x580244e8 width=4 value=0x260000 pc=0x0803dfba
+[0.129060845s] (MEM) write addr=0x580244d8 width=4 value=0x20 pc=0x0803dfba
+[0.197842234s] (MEM) write addr=0x580244e8 width=4 value=0x260040 pc=0x0803dfba
+[0.197842576s] (MEM) write addr=0x58024490 width=4 value=0x40 pc=0x0803e5c0
+[0.197842627s] (MEM) write addr=0x58024490 width=4 value=0x0 pc=0x0803e5de
+[0.197843624s] (MEM) write addr=0x58024450 width=4 value=0x0 pc=0x0803e044
+[0.197845387s] (MEM) write addr=0x580244f0 width=4 value=0x1000 pc=0x0803dfba
+[0.197846082s] (MEM) write addr=0x580244f0 width=4 value=0x1001 pc=0x0803dfba
+[0.197846362s] (MEM) write addr=0x58024498 width=4 value=0x1 pc=0x0803e5c0
+[0.197846409s] (MEM) write addr=0x58024498 width=4 value=0x0 pc=0x0803e5de
+[0.197849056s] (MEM) write addr=0x58024450 width=4 value=0x20000000 pc=0x0803e044
+[0.197849231s] (MEM) write addr=0x580244ec width=4 value=0x100 pc=0x0803dfba
+[0.219749491s] (TRACE) main pc=0x08001a00
+[3.274771998s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[3.274775391s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[3.274844962s] (TRACE) Components::Adcs::run_handler(short, unsigned int) pc=0x0800d84c
+[3.284045931s] (TRACE) Components::FramParams::run_handler(short, unsigned int) pc=0x0800e028
+[3.365700822s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[3.365702129s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[3.465635356s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[3.465636729s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[3.565602393s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[3.565603756s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[3.665606920s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[3.665608271s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[3.765611458s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[3.765612809s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[3.865615993s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[3.865617344s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[3.965620545s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[3.965621896s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[4.065625085s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[4.065626436s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[4.165629653s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[4.167416327s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[4.265637647s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[4.265678002s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[4.265738794s] (TRACE) Components::Adcs::run_handler(short, unsigned int) pc=0x0800d84c
+[4.274293151s] (TRACE) Components::FramParams::run_handler(short, unsigned int) pc=0x0800e028
+[4.365643691s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[4.365644953s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[4.465680873s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[4.465682247s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[4.565647905s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[4.565649271s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[4.665652442s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[4.665653794s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[4.765656965s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[4.765658318s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[4.865661507s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[4.865662860s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[4.965666080s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[4.965667433s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[5.065670613s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[5.065671965s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[5.165675167s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[5.167461736s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[5.265683151s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[5.265723460s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[5.265784211s] (TRACE) Components::Adcs::run_handler(short, unsigned int) pc=0x0800d84c
+[5.274337716s] (TRACE) Components::FramParams::run_handler(short, unsigned int) pc=0x0800e028
+[5.365689218s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[5.365690480s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[5.465688862s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[5.465690214s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[5.565730920s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[5.565732294s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[5.665697960s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[5.665699325s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[5.765702500s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[5.765703853s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[5.865707040s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[5.865708393s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[5.965711616s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[5.965712969s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[6.065716127s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[6.065717480s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[6.165720696s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[6.167507251s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[6.265728684s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[6.265768974s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[6.265829691s] (TRACE) Components::Adcs::run_handler(short, unsigned int) pc=0x0800d84c
+[6.274383245s] (TRACE) Components::FramParams::run_handler(short, unsigned int) pc=0x0800e028
+[6.365734751s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[6.365736013s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[6.465734393s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[6.465735745s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[6.565776444s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[6.565777818s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[6.665743485s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[6.665744851s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[6.765748034s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[6.765749387s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[6.865752578s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[6.865753931s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[6.965757122s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[6.965758474s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[7.065761658s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[7.065763011s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[7.165766214s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[7.167552774s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[7.265774204s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[7.265814496s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[7.265875227s] (TRACE) Components::Adcs::run_handler(short, unsigned int) pc=0x0800d84c
+[7.274428800s] (TRACE) Components::FramParams::run_handler(short, unsigned int) pc=0x0800e028
+[7.365817856s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[7.365819129s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[7.465779956s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[7.465781324s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[7.565784464s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[7.565785818s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[7.665789005s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[7.665790360s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[7.765793560s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[7.765794914s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[7.865798093s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[7.865799447s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
+[7.965802651s] (TRACE) Components::EpsCan::run_handler(short, unsigned int) pc=0x0800d744
+[7.965804005s] (TRACE) Components::Detumble::run_handler(short, unsigned int) pc=0x0800e228
