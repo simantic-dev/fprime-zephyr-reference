@@ -1,0 +1,111 @@
+/*
+ * NUCLEO-H723ZG wiring for the satellite demo (Components/Satellite, sim/).
+ * Pins are our own choice of free NUCLEO-H723ZG header pins (UM2407); the full table
+ * is in sim/README.md. The FRAM, accelerometers, magnetometers, sun sensors and
+ * magnetorquer bridges are external parts: in sim they are the Python peers in sim/peers.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+#include <zephyr/dt-bindings/gpio/gpio.h>
+
+/ {
+	chosen {
+		/* USART3 (ST-LINK VCP) carries the F' ground link; the console moves to USART2. */
+		zephyr,console = &usart2;
+		zephyr,shell-uart = &usart2;
+	};
+
+	aliases {
+		gds-uart = &usart3;
+		fram0 = &fram;
+		accel0 = &acc0;
+		accel1 = &acc1;
+		magn0 = &mag0;
+		magn1 = &mag1;
+		mtq-pwm = &pwm1;
+	};
+
+	zephyr,user {
+		/* Sun sensors, panels 1..6: A0 PA3, A1 PC0, A3 PB1, PA0, PF11, PF12 (ADC1 INP15/10/5/16/2/6). */
+		io-channels = <&adc1 15>, <&adc1 10>, <&adc1 5>, <&adc1 16>, <&adc1 2>, <&adc1 6>;
+		/* Magnetorquer H-bridge enable: D8 PF3, active high. */
+		mtq-en-gpios = <&gpiof 3 GPIO_ACTIVE_HIGH>;
+		/* Coil direction X, Y, Z: D2 PG14, D4 PE14, D7 PG12; 1 = positive dipole. */
+		mtq-dir-gpios = <&gpiog 14 GPIO_ACTIVE_HIGH>, <&gpioe 14 GPIO_ACTIVE_HIGH>,
+				<&gpiog 12 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+/* FRAM on the Arduino SPI pins: SPI1 D13 PA5 / D12 PA6 / D11 PB5, CS D10 PD14 (board defaults). */
+&spi1 {
+	fram: fram@0 {
+		compatible = "atmel,at25";
+		reg = <0>;
+		spi-max-frequency = <DT_FREQ_M(20)>;
+		size = <DT_SIZE_K(256)>;
+		/* FRAM has no pages or write cycle; the binding requires both. */
+		pagesize = <256>;
+		address-width = <24>;
+		timeout = <1>;
+	};
+};
+
+/* Attitude sensors on the Arduino I2C pins: I2C1 D15 PB8 SCL / D14 PB9 SDA (board defaults). */
+&i2c1 {
+	acc0: accel@18 {
+		compatible = "st,lis2dw12";
+		reg = <0x18>;
+	};
+
+	acc1: accel@19 {
+		compatible = "st,lis2dw12";
+		reg = <0x19>;
+	};
+
+	mag0: magn@c {
+		compatible = "isentek,ist8310";
+		reg = <0x0c>;
+	};
+
+	mag1: magn@e {
+		compatible = "isentek,ist8310";
+		reg = <0x0e>;
+	};
+};
+
+&adc1 {
+	pinctrl-0 = <&adc1_inp15_pa3 &adc1_inp10_pc0 &adc1_inp5_pb1
+		     &adc1_inp16_pa0 &adc1_inp2_pf11 &adc1_inp6_pf12>;
+	pinctrl-names = "default";
+	st,adc-clock-source = "SYNC";
+	st,adc-prescaler = <4>;
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+#define SUN_CHANNEL(unit, n)						\
+	channel@unit {						\
+		reg = <n>;					\
+		zephyr,gain = "ADC_GAIN_1";			\
+		zephyr,reference = "ADC_REF_INTERNAL";		\
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>; \
+		zephyr,resolution = <16>;			\
+	}
+	SUN_CHANNEL(f, 15);
+	SUN_CHANNEL(a, 10);
+	SUN_CHANNEL(5, 5);
+	SUN_CHANNEL(10, 16);
+	SUN_CHANNEL(2, 2);
+	SUN_CHANNEL(6, 6);
+};
+
+/* Magnetorquer PWM X/Y/Z: TIM1 CH1 D6 PE9, CH2 D5 PE11, CH3 D3 PE13. */
+&timers1 {
+	status = "okay";
+
+	pwm1: pwm {
+		pinctrl-0 = <&tim1_ch1_pe9 &tim1_ch2_pe11 &tim1_ch3_pe13>;
+		pinctrl-names = "default";
+		status = "okay";
+	};
+};
