@@ -1,0 +1,74 @@
+#!/bin/sh
+# One-command demo: the F' deployment (sim/fprime-demo.elf) on a simulated
+# NUCLEO-H723ZG in orbit, with the stock F' ground station (fprime-gds, web UI on
+# http://127.0.0.1:5800) on the board's ground link, then a scripted walkthrough.
+#
+# Usage: ./demo [nominal|faults]      Ctrl-C stops the simulator and the GDS.
+# Runs 600 s of virtual time at 1x wall clock; the GDS stays up until then.
+# Output: .demo/ (sim.log, gds-logs/, walkthrough.txt, console.txt when the sim exits).
+set -eu
+
+MODE=${1:-nominal}
+case $MODE in
+  nominal) SCENARIO=scenario.yaml ;;
+  faults)  SCENARIO=scenario-faults.yaml ;;
+  *) echo "usage: $0 [nominal|faults]" >&2; exit 2 ;;
+esac
+ROOT=$(cd -- "$(dirname -- "$0")" && pwd)
+OUT=$ROOT/.demo
+VENV=$OUT/venv
+GDS_VERSION=4.4.0a3   # the GDS of nasa/fprime 744d3e3 (lib/fprime/requirements.txt)
+GDS_PORT=5761 GUI_PORT=5800 TTS_PORT=50050
+
+command -v sim >/dev/null 2>&1 || {
+  echo "sim is not installed. Install it with:  curl -fsSL https://simantic.com/install | sh" >&2; exit 1; }
+for p in $GDS_PORT $GUI_PORT $TTS_PORT; do
+  if nc -z 127.0.0.1 $p 2>/dev/null; then echo "port $p is in use (another demo running?)" >&2; exit 1; fi
+done
+
+mkdir -p "$OUT"
+if [ ! -x "$VENV/bin/fprime-gds" ]; then
+  echo "installing fprime-gds $GDS_VERSION into $VENV"
+  python3 -m venv "$VENV"
+  "$VENV/bin/pip" install -q "fprime-gds==$GDS_VERSION"
+fi
+
+PIDS=
+cleanup() {
+  trap - INT TERM EXIT
+  # the GDS starts child processes; stop them with their parent
+  for p in $PIDS; do pkill -P "$p" 2>/dev/null || true; kill "$p" 2>/dev/null || true; done
+  wait 2>/dev/null || true
+}
+trap cleanup INT TERM EXIT
+
+rm -rf "$OUT/gds-logs" "$OUT/cli-logs" "$OUT/console.txt"
+( cd "$ROOT/sim" && exec sim run --scenario "$SCENARIO" --ascii --real-time --output "$OUT/console.txt" ) \
+  > "$OUT/sim.log" 2>&1 &
+SIM_PID=$!; PIDS=$SIM_PID
+echo "sim ($MODE) pid $SIM_PID, log $OUT/sim.log"
+i=0
+until grep -qE "usart3 (↔|<->) tcp:$GDS_PORT" "$OUT/sim.log" 2>/dev/null; do
+  kill -0 $SIM_PID 2>/dev/null || { echo "sim exited:" >&2; tail -20 "$OUT/sim.log" >&2; exit 1; }
+  i=$((i + 1)); [ $i -lt 120 ] || { echo "no ground-link bridge after 60 s" >&2; exit 1; }
+  sleep 0.5
+done
+
+"$VENV/bin/fprime-gds" -n --dictionary "$ROOT/sim/dictionary.json" \
+  --communication-selection ip --ip-client --ip-address 127.0.0.1 --ip-port $GDS_PORT \
+  --gui html --gui-port $GUI_PORT --skip-browser-open --no-zmq --tts-addr 127.0.0.1 --tts-port $TTS_PORT \
+  -l "$OUT/gds-logs" --log-directly > "$OUT/gds.log" 2>&1 &
+PIDS="$PIDS $!"
+i=0
+until curl -sf -o /dev/null "http://127.0.0.1:$GUI_PORT/"; do
+  i=$((i + 1)); [ $i -lt 120 ] || { echo "GDS did not start; see $OUT/gds.log" >&2; exit 1; }
+  sleep 0.5
+done
+echo "F' GDS: http://127.0.0.1:$GUI_PORT"
+until [ -f "$OUT/gds-logs/channel.log" ]; do sleep 0.5; done
+
+LOGS="$OUT/gds-logs" VENV="$VENV" "$ROOT/sim/walkthrough.sh" "$MODE" | tee "$OUT/walkthrough.txt"
+
+echo; echo "walkthrough done; the GDS stays up until the 600 s scenario ends. Ctrl-C to stop."
+wait $SIM_PID || true
+tail -3 "$OUT/sim.log"
