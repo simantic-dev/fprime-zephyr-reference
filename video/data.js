@@ -394,32 +394,32 @@ window.DATA = {
  ],
  "faults": [
   {
-   "t": 33.129,
+   "t": 33.136,
    "name": "HkRetry",
    "text": "EPS HK attempt 1/3 failed: FRAME_LOST, retrying"
   },
   {
-   "t": 33.229,
+   "t": 33.237,
    "name": "HkRecovered",
    "text": "EPS HK ok on attempt 2"
   },
   {
-   "t": 42.129,
+   "t": 42.136,
    "name": "HkRetry",
    "text": "EPS HK attempt 1/3 failed: CRC_ERROR, retrying"
   },
   {
-   "t": 42.229,
+   "t": 42.236,
    "name": "HkRecovered",
    "text": "EPS HK ok on attempt 2"
   },
   {
-   "t": 51.329,
+   "t": 51.337,
    "name": "HkRetry",
    "text": "EPS HK attempt 1/3 failed: TIMEOUT, retrying"
   },
   {
-   "t": 51.429,
+   "t": 51.437,
    "name": "HkRecovered",
    "text": "EPS HK ok on attempt 2"
   }

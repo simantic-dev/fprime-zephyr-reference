@@ -5,11 +5,13 @@ upstream-tested **NUCLEO-H723ZG**, runs unmodified on a simulated board inside a
 orbit and power environment, with the stock F´ ground station attached. No board,
 no satellite.
 
-[![F´ demo video: 34 s, click to play](video/poster.png)](video/fprime-demo.mp4)
+**Media demo (34 s)**, the short cut for sharing:
 
-Longer cut (59 s), from reset to orbit: what is in the firmware file, how it loads, the clock
+[![Media demo, 34 s, click to play](video/poster.png)](video/media-demo.mp4)
+
+**Technical demo (60 s)**, from reset to orbit: what is in the firmware file, how it loads, the clock
 registers it writes at boot, and its 10 Hz and 1 Hz loops as the simulator timed them:
-[video/fprime-demo-long.mp4](video/fprime-demo-long.mp4).
+[video/technical-demo.mp4](video/technical-demo.mp4).
 
 ```sh
 ./demo            # nominal: orbit, eclipse, commands, detumble

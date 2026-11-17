@@ -1,17 +1,17 @@
 == 1. Orbit: EPS housekeeping, sun sensors and magnetometer through the eclipse (umbra from t=90 s)
    t_s  vbat_mV ibat_mA  sun_mV PAN1..PAN6                    bright  magn0_uT x/y/z
-    10     7754     333   2296     0     0  1215     0  1499       1     -3.2    1.7  -45.2
-    20     7755     332   1380     0     0  2200     0  1499       4     -1.5    2.3  -45.2
-    30     7746     235     95     0     0  2596     0  1499       4     -0.1    2.0  -45.1
-    40     7757     333      0     0  1215  2296     0  1499       4      0.7    1.2  -44.9
-    50     7758     332      0     0  2200  1380     0  1499       3      0.5    0.3  -44.8
-    60     7749     235      0     0  2596    95     0  1499       3     -0.2    0.1  -44.7
-    70     7759     333      0  1215  2296     0     0  1499       3     -0.8    0.5  -44.5
-    80     7760     332      0  2200  1380     0     0  1499       2     -0.9    1.6  -44.4
-    88     7754     259      0  2572   366     0     0  1499       2     -0.3    2.5  -44.2
-    89     7752     246      0  2587   230     0     0  1499       2     -0.2    2.5  -44.3
-    90     7708    -195      0  2596    95     0     0  1499       2      0.0    2.7  -44.2
-    91     7708    -195      0     0     0     0     0     0       1      0.0    2.7  -44.2
+    10     7754     333   2302     0     0  1203     0  1499       1     -3.1    1.7  -45.2
+    20     7755     332   1392     0     0  2193     0  1499       4     -1.4    2.4  -45.1
+    30     7746     235    108     0     0  2595     0  1499       4      0.0    2.1  -45.0
+    40     7757     333      0     0  1203  2302     0  1499       4      0.7    1.2  -44.9
+    50     7758     332      0     0  2193  1392     0  1499       3      0.5    0.3  -44.8
+    60     7749     235      0     0  2595   108     0  1499       3     -0.2    0.1  -44.7
+    70     7759     333      0  1203  2302     0     0  1499       3     -0.8    0.5  -44.5
+    80     7760     332      0  2193  1392     0     0  1499       2     -0.9    1.6  -44.4
+    88     7754     259      0  2570   379     0     0  1499       2     -0.3    2.5  -44.2
+    89     7752     246      0  2586   244     0     0  1499       2     -0.2    2.6  -44.2
+    90     7708    -195      0  2595   108     0     0  1499       2      0.0    2.7  -44.2
+    91     7708    -195      0     0     0     0     0     0       1      0.1    2.7  -44.2
     92     7708    -195      0     0     0     0     0     0       1      0.2    2.8  -44.2
    100     7708    -195      0     0     0     0     0     0       1      1.6    3.0  -44.0
    110     7707    -195      0     0     0     0     0     0       1      3.5    2.3  -43.8
@@ -22,58 +22,58 @@
 
 == 3. Commands up the ground link, and their events
 > ReferenceDeployment.eps.EPS_PING
-  t=  123.220s  OpCodeDispatched   Opcode 0x10016000 dispatched to port 8
-  t=  123.229s  PingReply          EPS ping reply in 11 ms
-  t=  123.238s  OpCodeCompleted    Opcode 0x10016000 completed
+  t=  122.939s  OpCodeDispatched   Opcode 0x10017000 dispatched to port 8
+  t=  122.948s  OpCodeCompleted    Opcode 0x10017000 completed
+  t=  123.037s  PingReply          EPS ping reply in 99 ms
 > ReferenceDeployment.mtq.MTQ_SET --arguments Y 40
-  t=  125.329s  DutySet            MTQ Y duty 40% (pulse 20000 ns)
-  t=  125.338s  OpCodeDispatched   Opcode 0x10018000 dispatched to port 10
-  t=  125.348s  OpCodeCompleted    Opcode 0x10018000 completed
+  t=  123.936s  DutySet            MTQ Y duty 40% (pulse 20000 ns)
+  t=  123.946s  OpCodeDispatched   Opcode 0x10019000 dispatched to port 10
+  t=  123.956s  OpCodeCompleted    Opcode 0x10019000 completed
 > ReferenceDeployment.fram.FRAM_WRITE --arguments 0x100 0xCAFEF00D
-  t=  127.229s  FramWritten        FRAM[0x100] <- 0xcafef00d
-  t=  127.237s  OpCodeDispatched   Opcode 0x10019000 dispatched to port 9
-  t=  127.247s  OpCodeCompleted    Opcode 0x10019000 completed
+  t=  125.037s  FramWritten        FRAM[0x100] <- 0xcafef00d
+  t=  125.045s  OpCodeDispatched   Opcode 0x1001a000 dispatched to port 9
+  t=  125.055s  OpCodeCompleted    Opcode 0x1001a000 completed
 > ReferenceDeployment.fram.FRAM_READ --arguments 0x100
-  t=  129.029s  FramValue          FRAM[0x100] = 0xcafef00d
-  t=  129.037s  OpCodeDispatched   Opcode 0x10019001 dispatched to port 9
-  t=  129.047s  OpCodeCompleted    Opcode 0x10019001 completed
+  t=  125.837s  FramValue          FRAM[0x100] = 0xcafef00d
+  t=  125.845s  OpCodeDispatched   Opcode 0x1001a001 dispatched to port 9
+  t=  125.855s  OpCodeCompleted    Opcode 0x1001a001 completed
 
 == 4. Detumble: ground enables the onboard B-dot loop (magnetometer -> dB/dt -> bridge enable + DIR + TIM1 PWM)
    tumbling, controller OFF:
    t_s  mode  rate_est_deg_s  |dB/dt|_uT_s  magn0_uT x/y/z          duty_cmd % x/y/z  bridges
-   128   OFF           0.371         0.283     5.2   -1.9  -43.4      0    0    0      False
-   138   OFF           0.340         0.258     3.9   -4.8  -43.1      0    0    0      False
-   147   OFF           0.625         0.475     1.4   -6.7  -43.0      0    0    0      False
+   125   OFF           0.492         0.376     5.2   -1.1  -43.5      0    0    0      False
+   135   OFF           0.570         0.434     4.5   -3.9  -43.2      0    0    0      False
+   144   OFF           0.710         0.540     2.3   -6.1  -43.0      0    0    0      False
 > ReferenceDeployment.detumble.DETUMBLE_ENABLE
-  t=  150.218s  ModeChanged        Detumble ON (gain 100.0 %/(uT/s))
-  t=  150.228s  OpCodeDispatched   Opcode 0x1001a000 dispatched to port 7
-  t=  150.229s  BridgeEnabled      MTQ H-bridges enabled: True
-  t=  150.246s  OpCodeCompleted    Opcode 0x1001a000 completed
+  t=  146.837s  ModeChanged        Detumble ON (gain 100.0 %/(uT/s))
+  t=  146.847s  OpCodeDispatched   Opcode 0x1001b000 dispatched to port 7
+  t=  146.857s  OpCodeCompleted    Opcode 0x1001b000 completed
+  t=  146.937s  BridgeEnabled      MTQ H-bridges enabled: True
    controller ON:
    t_s  mode  rate_est_deg_s  |dB/dt|_uT_s  magn0_uT x/y/z          duty_cmd % x/y/z  bridges
-   152    ON           0.355         0.268    -0.4   -7.1  -42.7     24   -7   -9      True
-   162    ON           0.450         0.339    -4.3   -6.5  -42.4     25  -21   -9      True
-   172    ON           0.715         0.536    -7.7   -3.8  -42.1     18  -50   -9      True
-   182    ON           0.889         0.664    -9.2    0.7  -41.8     -8  -64  -14      True
-   192    ON           0.948         0.706    -8.3    5.6  -41.4    -38  -59   -9      True
-   202    ON           0.934         0.692    -4.7    9.7  -41.1    -58  -36  -10      True
-   212    ON           1.029         0.759     0.8   11.4  -40.7    -75   -9  -10      True
-   222    ON           0.968         0.711     6.7   10.2  -40.3    -68   20  -10      True
-   232    ON           0.971         0.710    11.5    5.8  -39.9    -50   46  -21      True
+   148    ON           0.536         0.407     1.1   -6.7  -42.9     37   16    4      True
+   158    ON           0.594         0.448    -2.7   -7.0  -42.6     44   -9   -2      True
+   168    ON           0.690         0.519    -6.4   -5.1  -42.3     47  -21    0      True
+   178    ON           0.466         0.349    -8.9   -1.2  -41.9     15  -31    6      True
+   188    ON           0.650         0.485    -9.0    3.6  -41.6     -6  -48    8      True
+   198    ON           0.673         0.501    -6.4    8.3  -41.2    -36  -34    7      True
+   208    ON           0.750         0.555    -1.5   11.1  -40.8    -54  -10    6      True
+   218    ON           0.847         0.624     4.4   11.1  -40.5    -57   24    6      True
+   228    ON           0.960         0.705     9.8    7.8  -40.1    -40   57    8      True
 > ReferenceDeployment.detumble.DETUMBLE_DISABLE
-  t=  242.029s  BridgeEnabled      MTQ H-bridges enabled: False
-  t=  242.037s  ModeChanged        Detumble OFF (gain 100.0 %/(uT/s))
-  t=  242.047s  OpCodeDispatched   Opcode 0x1001a001 dispatched to port 7
-  t=  242.057s  OpCodeCompleted    Opcode 0x1001a001 completed
-   rate estimate (20 s mean): 0.456 deg/s before, 0.929 deg/s after 90 s of B-dot
+  t=  237.837s  BridgeEnabled      MTQ H-bridges enabled: False
+  t=  237.846s  ModeChanged        Detumble OFF (gain 100.0 %/(uT/s))
+  t=  237.856s  OpCodeDispatched   Opcode 0x1001b001 dispatched to port 7
+  t=  237.866s  OpCodeCompleted    Opcode 0x1001b001 completed
+   rate estimate (20 s mean): 0.576 deg/s before, 0.903 deg/s after 90 s of B-dot
    open-loop physics: the coils were driven but the rate did not drop; this sky spins the
    satellite kinematically and ignores magnetorquer torque (closed loop needs an attitude dynamics plant).
 
 == 5. EPS faults injected on the CAN bus (HK requests 30/40/50) and the firmware's retries
-  t=   33.129s  HkRetry            EPS HK attempt 1/3 failed: FRAME_LOST, retrying
-  t=   33.229s  HkRecovered        EPS HK ok on attempt 2
-  t=   42.129s  HkRetry            EPS HK attempt 1/3 failed: CRC_ERROR, retrying
-  t=   42.229s  HkRecovered        EPS HK ok on attempt 2
-  t=   51.329s  HkRetry            EPS HK attempt 1/3 failed: TIMEOUT, retrying
-  t=   51.429s  HkRecovered        EPS HK ok on attempt 2
+  t=   33.136s  HkRetry            EPS HK attempt 1/3 failed: FRAME_LOST, retrying
+  t=   33.237s  HkRecovered        EPS HK ok on attempt 2
+  t=   42.136s  HkRetry            EPS HK attempt 1/3 failed: CRC_ERROR, retrying
+  t=   42.236s  HkRecovered        EPS HK ok on attempt 2
+  t=   51.337s  HkRetry            EPS HK attempt 1/3 failed: TIMEOUT, retrying
+  t=   51.437s  HkRecovered        EPS HK ok on attempt 2
   hk_retries = 3
