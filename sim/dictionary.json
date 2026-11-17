@@ -1,48 +1,14 @@
 {
   "metadata" : {
     "deploymentName" : "ReferenceDeployment.ReferenceDeployment",
-    "projectVersion" : "v4.3.0-7-g0f8cf45",
-    "frameworkVersion" : "744d3e3",
+    "projectVersion" : "v4.3.0-21-g11db79f-dirty",
+    "frameworkVersion" : "f28d2da",
     "libraryVersions" : [
-      "fprime-zephyr@b76db2b"
+      "fprime-zephyr@f97eaaf"
     ],
     "dictionarySpecVersion" : "1.0.0"
   },
   "typeDefinitions" : [
-    {
-      "kind" : "enum",
-      "qualifiedName" : "Svc.RateLogic",
-      "representationType" : {
-        "name" : "I32",
-        "kind" : "integer",
-        "size" : 32,
-        "signed" : true
-      },
-      "enumeratedConstants" : [
-        {
-          "name" : "SILENCED",
-          "value" : 0,
-          "annotation" : "No logic applied. Does not send group and freezes counter."
-        },
-        {
-          "name" : "EVERY_MAX",
-          "value" : 1,
-          "annotation" : "Send every MAX ticks between sends."
-        },
-        {
-          "name" : "ON_CHANGE_MIN",
-          "value" : 2,
-          "annotation" : "Send on updates after MIN ticks since last send."
-        },
-        {
-          "name" : "ON_CHANGE_MIN_OR_EVERY_MAX",
-          "value" : 3,
-          "annotation" : "Send on updates after MIN ticks since last send OR at MAX ticks between sends."
-        }
-      ],
-      "default" : "Svc.RateLogic.SILENCED",
-      "annotation" : "Enumeration for rate logic types for telemetry groups"
-    },
     {
       "kind" : "array",
       "qualifiedName" : "Svc.ComQueueDepth",
@@ -58,6 +24,21 @@
         0
       ],
       "annotation" : "Array of queue depths for Fw::Com types"
+    },
+    {
+      "kind" : "array",
+      "qualifiedName" : "Svc.BuffQueueDepth",
+      "size" : 1,
+      "elementType" : {
+        "name" : "U32",
+        "kind" : "integer",
+        "size" : 32,
+        "signed" : false
+      },
+      "default" : [
+        0
+      ],
+      "annotation" : "Array of queue depths for Fw::Buffer types"
     },
     {
       "kind" : "enum",
@@ -80,23 +61,6 @@
       ],
       "default" : "Svc.QueueType.COM_QUEUE",
       "annotation" : "An enumeration of queue data types"
-    },
-    {
-      "kind" : "alias",
-      "qualifiedName" : "PlatformSizeType",
-      "type" : {
-        "name" : "U64",
-        "kind" : "integer",
-        "size" : 64,
-        "signed" : false
-      },
-      "underlyingType" : {
-        "name" : "U64",
-        "kind" : "integer",
-        "size" : 64,
-        "signed" : false
-      },
-      "annotation" : "The unsigned type of larger sizes internal to the software,\ne.g., memory buffer sizes, file sizes. Must be unsigned.\nSupplied by platform, overridable by project."
     },
     {
       "kind" : "array",
@@ -147,21 +111,6 @@
       "default" : "Svc.CompressionAlgorithm.UNCOMPRESSED"
     },
     {
-      "kind" : "alias",
-      "qualifiedName" : "FwIndexType",
-      "type" : {
-        "name" : "PlatformIndexType",
-        "kind" : "qualifiedIdentifier"
-      },
-      "underlyingType" : {
-        "name" : "I16",
-        "kind" : "integer",
-        "size" : 16,
-        "signed" : true
-      },
-      "annotation" : "The type of smaller indices internal to the software, used\nfor array indices, e.g., port indices. Must be signed."
-    },
-    {
       "kind" : "enum",
       "qualifiedName" : "Svc.EventManager.Enabled",
       "representationType" : {
@@ -186,23 +135,6 @@
       "annotation" : "Enabled and disabled state"
     },
     {
-      "kind" : "array",
-      "qualifiedName" : "Components.MtqDuty",
-      "size" : 3,
-      "elementType" : {
-        "name" : "I8",
-        "kind" : "integer",
-        "size" : 8,
-        "signed" : true
-      },
-      "default" : [
-        0,
-        0,
-        0
-      ],
-      "annotation" : "Signed duty cycle per axis, percent: + drives DIR high (positive dipole), - low"
-    },
-    {
       "kind" : "enum",
       "qualifiedName" : "Svc.VersionStatus",
       "representationType" : {
@@ -225,45 +157,6 @@
       ],
       "default" : "Svc.VersionStatus.OK",
       "annotation" : "An enumeration for version status"
-    },
-    {
-      "kind" : "array",
-      "qualifiedName" : "Svc.TlmPacketizer.GroupConfigs",
-      "size" : 4,
-      "elementType" : {
-        "name" : "Svc.TlmPacketizer.GroupConfig",
-        "kind" : "qualifiedIdentifier"
-      },
-      "default" : [
-        {
-          "enabled" : "Fw.Enabled.DISABLED",
-          "min" : 0,
-          "max" : 0,
-          "rateLogic" : "Svc.RateLogic.SILENCED",
-          "forceEnabled" : "Fw.Enabled.DISABLED"
-        },
-        {
-          "enabled" : "Fw.Enabled.DISABLED",
-          "min" : 0,
-          "max" : 0,
-          "rateLogic" : "Svc.RateLogic.SILENCED",
-          "forceEnabled" : "Fw.Enabled.DISABLED"
-        },
-        {
-          "enabled" : "Fw.Enabled.DISABLED",
-          "min" : 0,
-          "max" : 0,
-          "rateLogic" : "Svc.RateLogic.SILENCED",
-          "forceEnabled" : "Fw.Enabled.DISABLED"
-        },
-        {
-          "enabled" : "Fw.Enabled.DISABLED",
-          "min" : 0,
-          "max" : 0,
-          "rateLogic" : "Svc.RateLogic.SILENCED",
-          "forceEnabled" : "Fw.Enabled.DISABLED"
-        }
-      ]
     },
     {
       "kind" : "enum",
@@ -433,6 +326,46 @@
       "annotation" : "An enumeration for Version Type"
     },
     {
+      "kind" : "struct",
+      "qualifiedName" : "Svc.RateConfig",
+      "members" : {
+        "rateLogic" : {
+          "type" : {
+            "name" : "Svc.RateLogic",
+            "kind" : "qualifiedIdentifier"
+          },
+          "index" : 0,
+          "annotation" : "Rate logic configuration"
+        },
+        "min" : {
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "index" : 1,
+          "annotation" : "Minimum Sched ticks between sends when using ON_CHANGE_MIN logic"
+        },
+        "max" : {
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "index" : 2,
+          "annotation" : "Maximum Sched ticks between sends when using EVERY_MAX logic"
+        }
+      },
+      "default" : {
+        "rateLogic" : "Svc.RateLogic.EVERY_MAX",
+        "min" : 0,
+        "max" : 0
+      },
+      "annotation" : "Rate policy"
+    },
+    {
       "kind" : "enum",
       "qualifiedName" : "Svc.Ccsds.Tfvn",
       "representationType" : {
@@ -472,6 +405,35 @@
       "annotation" : "Transfer Frame Version Numbers are 4 bits long\nCCSDS References add 1 to the binary value when counting versions in english (e.g. TM & TC are \"version 1\" but 0b00)\nUntil the release of USLP, TFVN were 2 bits long\nWith the addition of USLP two bits were added to the trailing end that serve as the 2 most significant bits\n(i.e. on the wire USLP sends 0b1100)\nSee section 3.2.2.2 of USLP Overview (CCSDS 700.1-G-1),\nsection 4.1.2.2.2 of AOS (CCSDS 732.0-B-5),\nsection 4.3.2 of Space Data Link Protocol Summary (CCSDS 130.2-G-3),\n& table 3-1 in Overview of Space Comms Protocols (CCSDS 130.0-G-4)"
     },
     {
+      "kind" : "enum",
+      "qualifiedName" : "Svc.RateLogic",
+      "representationType" : {
+        "name" : "U8",
+        "kind" : "integer",
+        "size" : 8,
+        "signed" : false
+      },
+      "enumeratedConstants" : [
+        {
+          "name" : "EVERY_MAX",
+          "value" : 0,
+          "annotation" : "Send every MAX ticks between sends."
+        },
+        {
+          "name" : "ON_CHANGE_MIN",
+          "value" : 1,
+          "annotation" : "Send on updates after MIN ticks since last send."
+        },
+        {
+          "name" : "ON_CHANGE_MIN_OR_EVERY_MAX",
+          "value" : 2,
+          "annotation" : "Send on updates after MIN ticks since last send OR at MAX ticks between sends."
+        }
+      ],
+      "default" : "Svc.RateLogic.EVERY_MAX",
+      "annotation" : "Enumeration for rate logic types for telemetry groups"
+    },
+    {
       "kind" : "struct",
       "qualifiedName" : "Svc.CompressionMetadata",
       "members" : {
@@ -485,78 +447,6 @@
       },
       "default" : {
         "algorithm" : "Svc.CompressionAlgorithm.UNCOMPRESSED"
-      }
-    },
-    {
-      "kind" : "array",
-      "qualifiedName" : "Svc.BuffQueueDepth",
-      "size" : 1,
-      "elementType" : {
-        "name" : "U32",
-        "kind" : "integer",
-        "size" : 32,
-        "signed" : false
-      },
-      "default" : [
-        0
-      ],
-      "annotation" : "Array of queue depths for Fw::Buffer types"
-    },
-    {
-      "kind" : "struct",
-      "qualifiedName" : "Svc.TlmPacketizer.GroupConfig",
-      "members" : {
-        "enabled" : {
-          "type" : {
-            "name" : "Fw.Enabled",
-            "kind" : "qualifiedIdentifier"
-          },
-          "index" : 0,
-          "annotation" : "Enable / Disable Telemetry Output"
-        },
-        "min" : {
-          "type" : {
-            "name" : "U32",
-            "kind" : "integer",
-            "size" : 32,
-            "signed" : false
-          },
-          "index" : 3,
-          "annotation" : "Minimum Sched Ticks when in ON_CHANGE_MIN"
-        },
-        "max" : {
-          "type" : {
-            "name" : "U32",
-            "kind" : "integer",
-            "size" : 32,
-            "signed" : false
-          },
-          "index" : 4,
-          "annotation" : "Maximum Sched Ticks when in EVERY_MAX"
-        },
-        "rateLogic" : {
-          "type" : {
-            "name" : "Svc.RateLogic",
-            "kind" : "qualifiedIdentifier"
-          },
-          "index" : 2,
-          "annotation" : "Rate Logic Configuration"
-        },
-        "forceEnabled" : {
-          "type" : {
-            "name" : "Fw.Enabled",
-            "kind" : "qualifiedIdentifier"
-          },
-          "index" : 1,
-          "annotation" : "Force Enable / Disable Telemetry Output"
-        }
-      },
-      "default" : {
-        "enabled" : "Fw.Enabled.DISABLED",
-        "min" : 0,
-        "max" : 0,
-        "rateLogic" : "Svc.RateLogic.SILENCED",
-        "forceEnabled" : "Fw.Enabled.DISABLED"
       }
     },
     {
@@ -621,6 +511,40 @@
       "default" : "Svc.Ccsds.EppLengthOfLength.Zero"
     },
     {
+      "kind" : "enum",
+      "qualifiedName" : "Svc.PacketOverrideType",
+      "representationType" : {
+        "name" : "U8",
+        "kind" : "integer",
+        "size" : 8,
+        "signed" : false
+      },
+      "enumeratedConstants" : [
+        {
+          "name" : "GROUP_DEFAULT",
+          "value" : 0,
+          "annotation" : "No override: the packet follows its group"
+        },
+        {
+          "name" : "OVERRIDE_SEND",
+          "value" : 1,
+          "annotation" : "The send state is overridden; rates follow the group"
+        },
+        {
+          "name" : "OVERRIDE_RATES",
+          "value" : 2,
+          "annotation" : "The rates are overridden; the send state follows the group"
+        },
+        {
+          "name" : "OVERRIDE_SEND_AND_RATES",
+          "value" : 3,
+          "annotation" : "Both the send state and the rates are overridden"
+        }
+      ],
+      "default" : "Svc.PacketOverrideType.GROUP_DEFAULT",
+      "annotation" : "Which fields of a packet's config override its group"
+    },
+    {
       "kind" : "alias",
       "qualifiedName" : "FwDpPriorityType",
       "type" : {
@@ -665,6 +589,54 @@
       ],
       "default" : "Svc.Ccsds.EppProtocolId.MissionSpecific",
       "annotation" : "Protocol IDs for EPP encapsulation packets per CCSDS 133.1-B-3 Section 4.1.2.3.3"
+    },
+    {
+      "kind" : "alias",
+      "qualifiedName" : "PlatformSizeType",
+      "type" : {
+        "name" : "U64",
+        "kind" : "integer",
+        "size" : 64,
+        "signed" : false
+      },
+      "underlyingType" : {
+        "name" : "U64",
+        "kind" : "integer",
+        "size" : 64,
+        "signed" : false
+      },
+      "annotation" : "The unsigned type of larger sizes internal to the software,\ne.g., memory buffer sizes, file sizes. Must be unsigned.\nSupplied by platform, overridable by project."
+    },
+    {
+      "kind" : "struct",
+      "qualifiedName" : "Svc.TlmSendConfig",
+      "members" : {
+        "sendState" : {
+          "type" : {
+            "name" : "Svc.TlmSendState",
+            "kind" : "qualifiedIdentifier"
+          },
+          "index" : 0,
+          "annotation" : "Send state"
+        },
+        "rates" : {
+          "type" : {
+            "name" : "Svc.RateConfig",
+            "kind" : "qualifiedIdentifier"
+          },
+          "index" : 1,
+          "annotation" : "Rate policy"
+        }
+      },
+      "default" : {
+        "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+        "rates" : {
+          "rateLogic" : "Svc.RateLogic.EVERY_MAX",
+          "min" : 0,
+          "max" : 0
+        }
+      },
+      "annotation" : "Telemetry send policy (send state + rates), shared by the per-group config and per-packet override."
     },
     {
       "kind" : "alias",
@@ -828,47 +800,6 @@
       "annotation" : "Tracks versions for project, framework and user defined versions etc"
     },
     {
-      "kind" : "array",
-      "qualifiedName" : "Svc.TlmPacketizer.SectionConfigs",
-      "size" : 1,
-      "elementType" : {
-        "name" : "Svc.TlmPacketizer.GroupConfigs",
-        "kind" : "qualifiedIdentifier"
-      },
-      "default" : [
-        [
-          {
-            "enabled" : "Fw.Enabled.ENABLED",
-            "min" : 0,
-            "max" : 0,
-            "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
-            "forceEnabled" : "Fw.Enabled.DISABLED"
-          },
-          {
-            "enabled" : "Fw.Enabled.ENABLED",
-            "min" : 0,
-            "max" : 0,
-            "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
-            "forceEnabled" : "Fw.Enabled.DISABLED"
-          },
-          {
-            "enabled" : "Fw.Enabled.ENABLED",
-            "min" : 0,
-            "max" : 0,
-            "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
-            "forceEnabled" : "Fw.Enabled.DISABLED"
-          },
-          {
-            "enabled" : "Fw.Enabled.ENABLED",
-            "min" : 0,
-            "max" : 0,
-            "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
-            "forceEnabled" : "Fw.Enabled.DISABLED"
-          }
-        ]
-      ]
-    },
-    {
       "kind" : "enum",
       "qualifiedName" : "Fw.TimeComparison",
       "representationType" : {
@@ -1019,6 +950,70 @@
     },
     {
       "kind" : "alias",
+      "qualifiedName" : "FwIndexType",
+      "type" : {
+        "name" : "PlatformIndexType",
+        "kind" : "qualifiedIdentifier"
+      },
+      "underlyingType" : {
+        "name" : "I16",
+        "kind" : "integer",
+        "size" : 16,
+        "signed" : true
+      },
+      "annotation" : "The type of smaller indices internal to the software, used\nfor array indices, e.g., port indices. Must be signed."
+    },
+    {
+      "kind" : "array",
+      "qualifiedName" : "Svc.ComQueueManagedDrops",
+      "size" : 2,
+      "elementType" : {
+        "name" : "U32",
+        "kind" : "integer",
+        "size" : 32,
+        "signed" : false
+      },
+      "default" : [
+        0,
+        0
+      ],
+      "annotation" : "Per-port counts of managed queue overflow drops for Fw::ComBuffer"
+    },
+    {
+      "kind" : "array",
+      "qualifiedName" : "Svc.ComQueueIngressDrops",
+      "size" : 2,
+      "elementType" : {
+        "name" : "U32",
+        "kind" : "integer",
+        "size" : 32,
+        "signed" : false
+      },
+      "default" : [
+        0,
+        0
+      ],
+      "annotation" : "Per-port counts of async ingress drops for Fw::ComBuffer"
+    },
+    {
+      "kind" : "array",
+      "qualifiedName" : "Components.MtqDuty",
+      "size" : 3,
+      "elementType" : {
+        "name" : "I8",
+        "kind" : "integer",
+        "size" : 8,
+        "signed" : true
+      },
+      "default" : [
+        0,
+        0,
+        0
+      ],
+      "annotation" : "Signed duty cycle per axis, percent: + drives DIR high (positive dipole), - low"
+    },
+    {
+      "kind" : "alias",
       "qualifiedName" : "FwTlmPacketizeIdType",
       "type" : {
         "name" : "U16",
@@ -1092,6 +1087,85 @@
         "signed" : false
       },
       "annotation" : "The type of a command opcode"
+    },
+    {
+      "kind" : "array",
+      "qualifiedName" : "Svc.TlmPacketizer.SectionConfigs",
+      "size" : 1,
+      "elementType" : {
+        "name" : "Svc.TlmPacketizer.GroupConfigs",
+        "kind" : "qualifiedIdentifier"
+      },
+      "default" : [
+        [
+          {
+            "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+            "rates" : {
+              "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
+              "min" : 0,
+              "max" : 0
+            }
+          },
+          {
+            "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+            "rates" : {
+              "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
+              "min" : 0,
+              "max" : 0
+            }
+          },
+          {
+            "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+            "rates" : {
+              "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
+              "min" : 0,
+              "max" : 0
+            }
+          },
+          {
+            "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+            "rates" : {
+              "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
+              "min" : 0,
+              "max" : 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "kind" : "enum",
+      "qualifiedName" : "Svc.TlmSendState",
+      "representationType" : {
+        "name" : "U8",
+        "kind" : "integer",
+        "size" : 8,
+        "signed" : false
+      },
+      "enumeratedConstants" : [
+        {
+          "name" : "INHERIT_FROM_PARENT",
+          "value" : 0,
+          "annotation" : "Packet: use the group's state; group: use the section enable (default)"
+        },
+        {
+          "name" : "SEND_WHEN_SECTION_ENABLED",
+          "value" : 1,
+          "annotation" : "Send only while the section is enabled"
+        },
+        {
+          "name" : "SEND_ALWAYS",
+          "value" : 2,
+          "annotation" : "Send; the section enable is ignored"
+        },
+        {
+          "name" : "SEND_NEVER",
+          "value" : 3,
+          "annotation" : "Never send"
+        }
+      ],
+      "default" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+      "annotation" : "Send policy of a group or packet. Resolution: packet -> group -> section enable."
     },
     {
       "kind" : "enum",
@@ -1308,6 +1382,40 @@
         "signed" : false
       },
       "annotation" : "The width of packet descriptors when they are serialized by the framework"
+    },
+    {
+      "kind" : "struct",
+      "qualifiedName" : "Svc.PacketOverrideConfig",
+      "members" : {
+        "overrideType" : {
+          "type" : {
+            "name" : "Svc.PacketOverrideType",
+            "kind" : "qualifiedIdentifier"
+          },
+          "index" : 0,
+          "annotation" : "Fields of sendConfig that override the group"
+        },
+        "sendConfig" : {
+          "type" : {
+            "name" : "Svc.TlmSendConfig",
+            "kind" : "qualifiedIdentifier"
+          },
+          "index" : 1,
+          "annotation" : "Override values (only the fields selected by overrideType apply)"
+        }
+      },
+      "default" : {
+        "overrideType" : "Svc.PacketOverrideType.GROUP_DEFAULT",
+        "sendConfig" : {
+          "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+          "rates" : {
+            "rateLogic" : "Svc.RateLogic.EVERY_MAX",
+            "min" : 0,
+            "max" : 0
+          }
+        }
+      },
+      "annotation" : "Per-packet override: which fields apply and their values"
     },
     {
       "kind" : "enum",
@@ -1538,6 +1646,49 @@
       "annotation" : "Data Structure for custom version Tlm"
     },
     {
+      "kind" : "array",
+      "qualifiedName" : "Svc.TlmPacketizer.GroupConfigs",
+      "size" : 4,
+      "elementType" : {
+        "name" : "Svc.TlmSendConfig",
+        "kind" : "qualifiedIdentifier"
+      },
+      "default" : [
+        {
+          "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+          "rates" : {
+            "rateLogic" : "Svc.RateLogic.EVERY_MAX",
+            "min" : 0,
+            "max" : 0
+          }
+        },
+        {
+          "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+          "rates" : {
+            "rateLogic" : "Svc.RateLogic.EVERY_MAX",
+            "min" : 0,
+            "max" : 0
+          }
+        },
+        {
+          "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+          "rates" : {
+            "rateLogic" : "Svc.RateLogic.EVERY_MAX",
+            "min" : 0,
+            "max" : 0
+          }
+        },
+        {
+          "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+          "rates" : {
+            "rateLogic" : "Svc.RateLogic.EVERY_MAX",
+            "min" : 0,
+            "max" : 0
+          }
+        }
+      ]
+    },
+    {
       "kind" : "enum",
       "qualifiedName" : "Fw.Enabled",
       "representationType" : {
@@ -1560,6 +1711,36 @@
       ],
       "default" : "Fw.Enabled.DISABLED",
       "annotation" : "Enabled and disabled states"
+    },
+    {
+      "kind" : "array",
+      "qualifiedName" : "Svc.BuffQueueManagedDrops",
+      "size" : 1,
+      "elementType" : {
+        "name" : "U32",
+        "kind" : "integer",
+        "size" : 32,
+        "signed" : false
+      },
+      "default" : [
+        0
+      ],
+      "annotation" : "Per-port counts of managed queue overflow drops for Fw::Buffer"
+    },
+    {
+      "kind" : "array",
+      "qualifiedName" : "Svc.BuffQueueIngressDrops",
+      "size" : 1,
+      "elementType" : {
+        "name" : "U32",
+        "kind" : "integer",
+        "size" : 32,
+        "signed" : false
+      },
+      "default" : [
+        0
+      ],
+      "annotation" : "Per-port counts of async ingress drops for Fw::Buffer"
     },
     {
       "kind" : "alias",
@@ -2217,45 +2398,9 @@
       "annotation" : "Enable / disable a telemetry section"
     },
     {
-      "name" : "CdhCore.tlmSend.ENABLE_GROUP",
+      "name" : "CdhCore.tlmSend.CONFIGURE_GROUP_SEND",
       "commandKind" : "async",
       "opcode" : 16801795,
-      "formalParams" : [
-        {
-          "name" : "section",
-          "type" : {
-            "name" : "Svc.TelemetrySection",
-            "kind" : "qualifiedIdentifier"
-          },
-          "ref" : false,
-          "annotation" : "Section grouping to configure"
-        },
-        {
-          "name" : "tlmGroup",
-          "type" : {
-            "name" : "FwChanIdType",
-            "kind" : "qualifiedIdentifier"
-          },
-          "ref" : false,
-          "annotation" : "Group Identifier"
-        },
-        {
-          "name" : "enable",
-          "type" : {
-            "name" : "Fw.Enabled",
-            "kind" : "qualifiedIdentifier"
-          },
-          "ref" : false,
-          "annotation" : "Section enabled or disabled"
-        }
-      ],
-      "queueFullBehavior" : "assert",
-      "annotation" : "Enable / disable telemetry of a group on a section"
-    },
-    {
-      "name" : "CdhCore.tlmSend.FORCE_GROUP",
-      "commandKind" : "async",
-      "opcode" : 16801796,
       "formalParams" : [
         {
           "name" : "section",
@@ -2276,22 +2421,22 @@
           "annotation" : "Group Identifier"
         },
         {
-          "name" : "enable",
+          "name" : "sendState",
           "type" : {
-            "name" : "Fw.Enabled",
+            "name" : "Svc.TlmSendState",
             "kind" : "qualifiedIdentifier"
           },
           "ref" : false,
-          "annotation" : "Section enabled or disabled"
+          "annotation" : "Send state (INHERIT_FROM_PARENT follows the section enable)"
         }
       ],
       "queueFullBehavior" : "assert",
-      "annotation" : "Force telemetering a group on a section, even if disabled"
+      "annotation" : "Set the send state of a group on a section"
     },
     {
       "name" : "CdhCore.tlmSend.CONFIGURE_GROUP_RATES",
       "commandKind" : "async",
-      "opcode" : 16801797,
+      "opcode" : 16801796,
       "formalParams" : [
         {
           "name" : "section",
@@ -2344,12 +2489,168 @@
         }
       ],
       "queueFullBehavior" : "assert",
-      "annotation" : "Set Min and Max Deltas between successive packets"
+      "annotation" : "Set the rate logic and Min / Max deltas between successive packets of a group on a section"
+    },
+    {
+      "name" : "CdhCore.tlmSend.GET_PACKET_CONFIG",
+      "commandKind" : "async",
+      "opcode" : 16801797,
+      "formalParams" : [
+        {
+          "name" : "section",
+          "type" : {
+            "name" : "Svc.TelemetrySection",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "Section to query"
+        },
+        {
+          "name" : "packetId",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "Packet identifier"
+        }
+      ],
+      "queueFullBehavior" : "assert",
+      "annotation" : "Report a packet's override and effective configuration (PacketConfigReport event)"
+    },
+    {
+      "name" : "CdhCore.tlmSend.OVERRIDE_PACKET_SEND",
+      "commandKind" : "async",
+      "opcode" : 16801798,
+      "formalParams" : [
+        {
+          "name" : "section",
+          "type" : {
+            "name" : "Svc.TelemetrySection",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "Section to configure"
+        },
+        {
+          "name" : "packetId",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "Packet identifier"
+        },
+        {
+          "name" : "sendState",
+          "type" : {
+            "name" : "Svc.TlmSendState",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "Send state (INHERIT_FROM_PARENT follows the group)"
+        }
+      ],
+      "queueFullBehavior" : "assert",
+      "annotation" : "Override the send state of a single packet in a section (rates follow the group unless also overridden)"
+    },
+    {
+      "name" : "CdhCore.tlmSend.OVERRIDE_PACKET_RATES",
+      "commandKind" : "async",
+      "opcode" : 16801799,
+      "formalParams" : [
+        {
+          "name" : "section",
+          "type" : {
+            "name" : "Svc.TelemetrySection",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "Section to configure"
+        },
+        {
+          "name" : "packetId",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "Packet identifier"
+        },
+        {
+          "name" : "rateLogic",
+          "type" : {
+            "name" : "Svc.RateLogic",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "Rate logic"
+        },
+        {
+          "name" : "minDelta",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "Minimum Sched ticks between sends (ON_CHANGE_MIN logic)"
+        },
+        {
+          "name" : "maxDelta",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "Maximum Sched ticks between sends (EVERY_MAX logic)"
+        }
+      ],
+      "queueFullBehavior" : "assert",
+      "annotation" : "Override the rate logic and thresholds of a single packet (send state follows the group unless also overridden)"
+    },
+    {
+      "name" : "CdhCore.tlmSend.CLEAR_PACKET_OVERRIDE",
+      "commandKind" : "async",
+      "opcode" : 16801800,
+      "formalParams" : [
+        {
+          "name" : "section",
+          "type" : {
+            "name" : "Svc.TelemetrySection",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "Section to clear"
+        },
+        {
+          "name" : "packetId",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "Packet identifier"
+        }
+      ],
+      "queueFullBehavior" : "assert",
+      "annotation" : "Clear a single packet's override. The packet follows its group again."
     },
     {
       "name" : "CdhCore.tlmSend.SECTION_ENABLED_PRM_SET",
       "commandKind" : "set",
-      "opcode" : 16801798,
+      "opcode" : 16801801,
       "formalParams" : [
         {
           "name" : "val",
@@ -2365,7 +2666,7 @@
     {
       "name" : "CdhCore.tlmSend.SECTION_ENABLED_PRM_SAVE",
       "commandKind" : "save",
-      "opcode" : 16801799,
+      "opcode" : 16801802,
       "formalParams" : [
       ],
       "annotation" : "Parameter to control section enable flags"
@@ -2373,7 +2674,7 @@
     {
       "name" : "CdhCore.tlmSend.SECTION_CONFIGS_PRM_SET",
       "commandKind" : "set",
-      "opcode" : 16801800,
+      "opcode" : 16801803,
       "formalParams" : [
         {
           "name" : "val",
@@ -2389,7 +2690,7 @@
     {
       "name" : "CdhCore.tlmSend.SECTION_CONFIGS_PRM_SAVE",
       "commandKind" : "save",
-      "opcode" : 16801801,
+      "opcode" : 16801804,
       "formalParams" : [
       ],
       "annotation" : "Parameter to control section configuration"
@@ -2477,7 +2778,7 @@
     {
       "name" : "ReferenceDeployment.eps.EPS_PING",
       "commandKind" : "guarded",
-      "opcode" : 268525568,
+      "opcode" : 268529664,
       "formalParams" : [
       ],
       "annotation" : "CSP ping (port 1) to the EPS node; the reply is reported as an event"
@@ -2485,7 +2786,7 @@
     {
       "name" : "ReferenceDeployment.mtq.MTQ_SET",
       "commandKind" : "guarded",
-      "opcode" : 268533760,
+      "opcode" : 268537856,
       "formalParams" : [
         {
           "name" : "axis",
@@ -2511,7 +2812,7 @@
     {
       "name" : "ReferenceDeployment.mtq.MTQ_ENABLE",
       "commandKind" : "guarded",
-      "opcode" : 268533761,
+      "opcode" : 268537857,
       "formalParams" : [
         {
           "name" : "enable",
@@ -2528,7 +2829,7 @@
     {
       "name" : "ReferenceDeployment.fram.FRAM_WRITE",
       "commandKind" : "sync",
-      "opcode" : 268537856,
+      "opcode" : 268541952,
       "formalParams" : [
         {
           "name" : "addr",
@@ -2556,7 +2857,7 @@
     {
       "name" : "ReferenceDeployment.fram.FRAM_READ",
       "commandKind" : "sync",
-      "opcode" : 268537857,
+      "opcode" : 268541953,
       "formalParams" : [
         {
           "name" : "addr",
@@ -2574,7 +2875,7 @@
     {
       "name" : "ReferenceDeployment.detumble.DETUMBLE_ENABLE",
       "commandKind" : "guarded",
-      "opcode" : 268541952,
+      "opcode" : 268546048,
       "formalParams" : [
       ],
       "annotation" : "Start the B-dot loop: enables the H-bridges and drives the coils every tick"
@@ -2582,7 +2883,7 @@
     {
       "name" : "ReferenceDeployment.detumble.DETUMBLE_DISABLE",
       "commandKind" : "guarded",
-      "opcode" : 268541953,
+      "opcode" : 268546049,
       "formalParams" : [
       ],
       "annotation" : "Stop the loop: zero duty, H-bridges off"
@@ -2590,7 +2891,7 @@
     {
       "name" : "ReferenceDeployment.detumble.DETUMBLE_SET_GAIN",
       "commandKind" : "guarded",
-      "opcode" : 268541954,
+      "opcode" : 268546050,
       "formalParams" : [
         {
           "name" : "gain",
@@ -2628,32 +2929,36 @@
       "default" : [
         [
           {
-            "enabled" : "Fw.Enabled.ENABLED",
-            "min" : 0,
-            "max" : 0,
-            "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
-            "forceEnabled" : "Fw.Enabled.DISABLED"
+            "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+            "rates" : {
+              "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
+              "min" : 0,
+              "max" : 0
+            }
           },
           {
-            "enabled" : "Fw.Enabled.ENABLED",
-            "min" : 0,
-            "max" : 0,
-            "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
-            "forceEnabled" : "Fw.Enabled.DISABLED"
+            "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+            "rates" : {
+              "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
+              "min" : 0,
+              "max" : 0
+            }
           },
           {
-            "enabled" : "Fw.Enabled.ENABLED",
-            "min" : 0,
-            "max" : 0,
-            "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
-            "forceEnabled" : "Fw.Enabled.DISABLED"
+            "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+            "rates" : {
+              "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
+              "min" : 0,
+              "max" : 0
+            }
           },
           {
-            "enabled" : "Fw.Enabled.ENABLED",
-            "min" : 0,
-            "max" : 0,
-            "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
-            "forceEnabled" : "Fw.Enabled.DISABLED"
+            "sendState" : "Svc.TlmSendState.INHERIT_FROM_PARENT",
+            "rates" : {
+              "rateLogic" : "Svc.RateLogic.ON_CHANGE_MIN",
+              "min" : 0,
+              "max" : 0
+            }
           }
         ]
       ],
@@ -3905,7 +4210,7 @@
     },
     {
       "name" : "CdhCore.tlmSend.PacketSent",
-      "severity" : "ACTIVITY_LO",
+      "severity" : "ACTIVITY_HI",
       "formalParams" : [
         {
           "name" : "packetId",
@@ -4008,6 +4313,247 @@
         "count" : 10,
         "every" : null
       }
+    },
+    {
+      "name" : "CdhCore.tlmSend.ReloadRecordUnknownPacket",
+      "severity" : "WARNING_LO",
+      "formalParams" : [
+        {
+          "name" : "packetId",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "The packet id in the record"
+        }
+      ],
+      "id" : 16801799,
+      "format" : "packetOverrideIn reload record for unknown packet id {} skipped",
+      "annotation" : "A packetOverrideIn reload record referenced a packet id not in this deployment; the record was skipped"
+    },
+    {
+      "name" : "CdhCore.tlmSend.ConfigMirrorAllocFailed",
+      "severity" : "WARNING_HI",
+      "formalParams" : [
+      ],
+      "id" : 16801800,
+      "format" : "Could not allocate buffer to mirror packet config",
+      "annotation" : "Could not allocate a buffer to mirror a per-packet override out packetOverrideOut",
+      "throttle" : {
+        "count" : 10,
+        "every" : null
+      }
+    },
+    {
+      "name" : "CdhCore.tlmSend.PacketConfigReport",
+      "severity" : "ACTIVITY_HI",
+      "formalParams" : [
+        {
+          "name" : "section",
+          "type" : {
+            "name" : "Svc.TelemetrySection",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "The section queried"
+        },
+        {
+          "name" : "packetId",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "The packet id"
+        },
+        {
+          "name" : "override",
+          "type" : {
+            "name" : "Svc.PacketOverrideConfig",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "The stored override (GROUP_DEFAULT if none)"
+        },
+        {
+          "name" : "effective",
+          "type" : {
+            "name" : "Svc.TlmSendConfig",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "The effective configuration after applying the override to the group"
+        }
+      ],
+      "id" : 16801801,
+      "format" : "Packet config: section {} packet id {} override {} effective {}",
+      "annotation" : "A packet's override and effective configuration, emitted in response to GET_PACKET_CONFIG"
+    },
+    {
+      "name" : "CdhCore.tlmSend.PacketOverrideSet",
+      "severity" : "ACTIVITY_HI",
+      "formalParams" : [
+        {
+          "name" : "section",
+          "type" : {
+            "name" : "Svc.TelemetrySection",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "The section configured"
+        },
+        {
+          "name" : "packetId",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "The packet id"
+        },
+        {
+          "name" : "override",
+          "type" : {
+            "name" : "Svc.PacketOverrideConfig",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "The override now stored"
+        }
+      ],
+      "id" : 16801802,
+      "format" : "Packet override set: section {} packet id {} override {}",
+      "annotation" : "A per-packet override was applied by command; carries the stored override"
+    },
+    {
+      "name" : "CdhCore.tlmSend.PacketOverrideCleared",
+      "severity" : "ACTIVITY_HI",
+      "formalParams" : [
+        {
+          "name" : "section",
+          "type" : {
+            "name" : "Svc.TelemetrySection",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "The section the override was cleared in"
+        },
+        {
+          "name" : "packetId",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "The packet id"
+        }
+      ],
+      "id" : 16801803,
+      "format" : "Packet override cleared: section {} packet id {} reverts to group policy",
+      "annotation" : "A per-packet override was cleared by command; the packet reverts to its group policy"
+    },
+    {
+      "name" : "CdhCore.tlmSend.ConfigReloadFailed",
+      "severity" : "WARNING_HI",
+      "formalParams" : [
+        {
+          "name" : "status",
+          "type" : {
+            "name" : "Fw.DeserialStatus",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "The deserialization status that ended the reload"
+        }
+      ],
+      "id" : 16801804,
+      "format" : "packetOverrideIn reload failed with status {}",
+      "annotation" : "A packetOverrideIn reload buffer was malformed: a record failed to deserialize; later records were not applied"
+    },
+    {
+      "name" : "CdhCore.tlmSend.InvalidPacketConfig",
+      "severity" : "WARNING_LO",
+      "formalParams" : [
+        {
+          "name" : "packetId",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "The packet id in the rejected config"
+        }
+      ],
+      "id" : 16801805,
+      "format" : "Packet config for packet id {} rejected: invalid section",
+      "annotation" : "A command carried an invalid section for a per-packet operation"
+    },
+    {
+      "name" : "CdhCore.tlmSend.ReloadRecordInvalid",
+      "severity" : "WARNING_LO",
+      "formalParams" : [
+        {
+          "name" : "packetId",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "The packet id in the record"
+        }
+      ],
+      "id" : 16801806,
+      "format" : "packetOverrideIn reload record for packet id {} skipped: section out of range",
+      "annotation" : "A packetOverrideIn reload record carried a section out of range; the record was skipped"
+    },
+    {
+      "name" : "CdhCore.tlmSend.GroupSendStateSet",
+      "severity" : "ACTIVITY_HI",
+      "formalParams" : [
+        {
+          "name" : "section",
+          "type" : {
+            "name" : "Svc.TelemetrySection",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "Section grouping"
+        },
+        {
+          "name" : "tlmGroup",
+          "type" : {
+            "name" : "FwChanIdType",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "Group identifier"
+        },
+        {
+          "name" : "sendState",
+          "type" : {
+            "name" : "Svc.TlmSendState",
+            "kind" : "qualifiedIdentifier"
+          },
+          "ref" : false,
+          "annotation" : "New send state"
+        }
+      ],
+      "id" : 16801807,
+      "format" : "Section {} group {} send state set to {}",
+      "annotation" : "A group's send state was set by CONFIGURE_GROUP_SEND"
     },
     {
       "name" : "CdhCore.fatalHandler.Rebooting",
@@ -4520,6 +5066,65 @@
       }
     },
     {
+      "name" : "ReferenceDeployment.comDriver.RxOverrun",
+      "severity" : "WARNING_LO",
+      "formalParams" : [
+        {
+          "name" : "totalOverruns",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "Cumulative number of overrun indications"
+        }
+      ],
+      "id" : 268517376,
+      "format" : "UART RX overrun, {} overrun(s) total",
+      "annotation" : "Receive data was lost: the UART reported a hardware overrun (device FIFO\noverflowed while the RX interrupt was paused or masked) or the RX ring\nrejected data. Reported from task context; the count is cumulative.",
+      "throttle" : {
+        "count" : 5,
+        "every" : null
+      }
+    },
+    {
+      "name" : "ReferenceDeployment.comDriver.TxFrameDropped",
+      "severity" : "WARNING_LO",
+      "formalParams" : [
+        {
+          "name" : "frameSize",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "Size in bytes of the most recently rejected frame"
+        },
+        {
+          "name" : "totalDrops",
+          "type" : {
+            "name" : "U32",
+            "kind" : "integer",
+            "size" : 32,
+            "signed" : false
+          },
+          "ref" : false,
+          "annotation" : "Cumulative number of rejected frames"
+        }
+      ],
+      "id" : 268517377,
+      "format" : "UART TX frame of {} bytes dropped, {} drop(s) total",
+      "annotation" : "A frame passed to `send` did not fit in the free space of the TX ring and\nwas rejected whole (OTHER_ERROR returned to the caller, nothing written to\nthe device). `ready` is signalled again once TX_RESUME_THRESHOLD bytes of\nthe ring are free. Reported from task context; the count is cumulative.",
+      "throttle" : {
+        "count" : 5,
+        "every" : null
+      }
+    },
+    {
       "name" : "ReferenceDeployment.eps.HkRetry",
       "severity" : "WARNING_LO",
       "formalParams" : [
@@ -4552,7 +5157,7 @@
           "ref" : false
         }
       ],
-      "id" : 268525568,
+      "id" : 268529664,
       "format" : "EPS HK attempt {}/{} failed: {}, retrying"
     },
     {
@@ -4570,7 +5175,7 @@
           "ref" : false
         }
       ],
-      "id" : 268525569,
+      "id" : 268529665,
       "format" : "EPS HK ok on attempt {}"
     },
     {
@@ -4588,7 +5193,7 @@
           "ref" : false
         }
       ],
-      "id" : 268525570,
+      "id" : 268529666,
       "format" : "EPS HK failed after {} attempts"
     },
     {
@@ -4606,7 +5211,7 @@
           "ref" : false
         }
       ],
-      "id" : 268525571,
+      "id" : 268529667,
       "format" : "EPS ping reply in {} ms"
     },
     {
@@ -4614,7 +5219,7 @@
       "severity" : "WARNING_LO",
       "formalParams" : [
       ],
-      "id" : 268525572,
+      "id" : 268529668,
       "format" : "EPS ping: no reply"
     },
     {
@@ -4642,7 +5247,7 @@
           "ref" : false
         }
       ],
-      "id" : 268525573,
+      "id" : 268529669,
       "format" : "CAN error: op {} returned {}"
     },
     {
@@ -4670,7 +5275,7 @@
           "ref" : false
         }
       ],
-      "id" : 268529664,
+      "id" : 268533760,
       "format" : "attitude sensor {} read failed: {}",
       "throttle" : {
         "count" : 4,
@@ -4710,7 +5315,7 @@
           "ref" : false
         }
       ],
-      "id" : 268533760,
+      "id" : 268537856,
       "format" : "MTQ {} duty {}% (pulse {} ns)"
     },
     {
@@ -4727,7 +5332,7 @@
           "ref" : false
         }
       ],
-      "id" : 268533761,
+      "id" : 268537857,
       "format" : "MTQ H-bridges enabled: {}"
     },
     {
@@ -4753,7 +5358,7 @@
           "ref" : false
         }
       ],
-      "id" : 268533762,
+      "id" : 268537858,
       "format" : "MTQ {} pwm_set failed: {}",
       "throttle" : {
         "count" : 4,
@@ -4775,7 +5380,7 @@
           "ref" : false
         }
       ],
-      "id" : 268533763,
+      "id" : 268537859,
       "format" : "MTQ GPIO setup failed: {}"
     },
     {
@@ -4793,7 +5398,7 @@
           "ref" : false
         }
       ],
-      "id" : 268537856,
+      "id" : 268541952,
       "format" : "boot count {} (stored in FRAM)"
     },
     {
@@ -4821,7 +5426,7 @@
           "ref" : false
         }
       ],
-      "id" : 268537857,
+      "id" : 268541953,
       "format" : "FRAM[0x{x}] <- 0x{x}"
     },
     {
@@ -4849,7 +5454,7 @@
           "ref" : false
         }
       ],
-      "id" : 268537858,
+      "id" : 268541954,
       "format" : "FRAM[0x{x}] = 0x{x}"
     },
     {
@@ -4877,7 +5482,7 @@
           "ref" : false
         }
       ],
-      "id" : 268537859,
+      "id" : 268541955,
       "format" : "FRAM access at 0x{x} failed: {}"
     },
     {
@@ -4902,7 +5507,7 @@
           "ref" : false
         }
       ],
-      "id" : 268541952,
+      "id" : 268546048,
       "format" : "Detumble {} (gain {} %/(uT/s))"
     },
     {
@@ -4919,7 +5524,7 @@
           "ref" : false
         }
       ],
-      "id" : 268541953,
+      "id" : 268546049,
       "format" : "Detumble gain {} %/(uT/s)"
     },
     {
@@ -4937,7 +5542,7 @@
           "ref" : false
         }
       ],
-      "id" : 268541954,
+      "id" : 268546050,
       "format" : "Detumble magnetometer read failed: {}",
       "throttle" : {
         "count" : 4,
@@ -5258,6 +5863,46 @@
       "annotation" : "Depth of queues of Fw::Buffer type"
     },
     {
+      "name" : "ComCcsds.comQueue.comIngressDropped",
+      "type" : {
+        "name" : "Svc.ComQueueIngressDrops",
+        "kind" : "qualifiedIdentifier"
+      },
+      "id" : 33554434,
+      "telemetryUpdate" : "on change",
+      "annotation" : "Total number of async ingress drops per Fw::ComBuffer port"
+    },
+    {
+      "name" : "ComCcsds.comQueue.buffIngressDropped",
+      "type" : {
+        "name" : "Svc.BuffQueueIngressDrops",
+        "kind" : "qualifiedIdentifier"
+      },
+      "id" : 33554435,
+      "telemetryUpdate" : "on change",
+      "annotation" : "Total number of async ingress drops per Fw::Buffer port"
+    },
+    {
+      "name" : "ComCcsds.comQueue.comManagedDropped",
+      "type" : {
+        "name" : "Svc.ComQueueManagedDrops",
+        "kind" : "qualifiedIdentifier"
+      },
+      "id" : 33554436,
+      "telemetryUpdate" : "on change",
+      "annotation" : "Cumulative drops at the managed Fw::ComBuffer queues (including DROP_OLDEST)"
+    },
+    {
+      "name" : "ComCcsds.comQueue.buffManagedDropped",
+      "type" : {
+        "name" : "Svc.BuffQueueManagedDrops",
+        "kind" : "qualifiedIdentifier"
+      },
+      "id" : 33554437,
+      "telemetryUpdate" : "on change",
+      "annotation" : "Cumulative drops at the managed Fw::Buffer queues (including DROP_OLDEST)"
+    },
+    {
       "name" : "ComCcsds.commsBufferManager.TotalBuffs",
       "type" : {
         "name" : "U32",
@@ -5378,6 +6023,78 @@
       "annotation" : "Cycle slips for rate group"
     },
     {
+      "name" : "ReferenceDeployment.comDriver.RxBytes",
+      "type" : {
+        "name" : "U32",
+        "kind" : "integer",
+        "size" : 32,
+        "signed" : false
+      },
+      "id" : 268517376,
+      "telemetryUpdate" : "on change",
+      "annotation" : "Cumulative bytes received from the UART into the RX ring"
+    },
+    {
+      "name" : "ReferenceDeployment.comDriver.RxOverrunCount",
+      "type" : {
+        "name" : "U32",
+        "kind" : "integer",
+        "size" : 32,
+        "signed" : false
+      },
+      "id" : 268517377,
+      "telemetryUpdate" : "on change",
+      "annotation" : "Cumulative RX overrun indications (hardware overrun or ring put failure)"
+    },
+    {
+      "name" : "ReferenceDeployment.comDriver.RxBackpressureCount",
+      "type" : {
+        "name" : "U32",
+        "kind" : "integer",
+        "size" : 32,
+        "signed" : false
+      },
+      "id" : 268517378,
+      "telemetryUpdate" : "on change",
+      "annotation" : "Cumulative number of times the RX interrupt was paused because the RX ring\nwas full (back-pressure engaged)"
+    },
+    {
+      "name" : "ReferenceDeployment.comDriver.RxAllocFailCount",
+      "type" : {
+        "name" : "U32",
+        "kind" : "integer",
+        "size" : 32,
+        "signed" : false
+      },
+      "id" : 268517379,
+      "telemetryUpdate" : "on change",
+      "annotation" : "Cumulative number of drain iterations that stalled because no Fw.Buffer\ncould be allocated (data stays in the ring and is retried)"
+    },
+    {
+      "name" : "ReferenceDeployment.comDriver.TxBytes",
+      "type" : {
+        "name" : "U32",
+        "kind" : "integer",
+        "size" : 32,
+        "signed" : false
+      },
+      "id" : 268517380,
+      "telemetryUpdate" : "on change",
+      "annotation" : "Cumulative bytes moved from the TX ring into the device"
+    },
+    {
+      "name" : "ReferenceDeployment.comDriver.TxDropCount",
+      "type" : {
+        "name" : "U32",
+        "kind" : "integer",
+        "size" : 32,
+        "signed" : false
+      },
+      "id" : 268517381,
+      "telemetryUpdate" : "on change",
+      "annotation" : "Cumulative frames rejected by `send` because they did not fit in the TX ring"
+    },
+    {
       "name" : "ReferenceDeployment.eps.vbat_mV",
       "type" : {
         "name" : "U16",
@@ -5385,7 +6102,7 @@
         "size" : 16,
         "signed" : false
       },
-      "id" : 268525568,
+      "id" : 268529664,
       "telemetryUpdate" : "always"
     },
     {
@@ -5396,7 +6113,7 @@
         "size" : 16,
         "signed" : true
       },
-      "id" : 268525569,
+      "id" : 268529665,
       "telemetryUpdate" : "always"
     },
     {
@@ -5407,7 +6124,7 @@
         "size" : 16,
         "signed" : false
       },
-      "id" : 268525570,
+      "id" : 268529666,
       "telemetryUpdate" : "always"
     },
     {
@@ -5418,7 +6135,7 @@
         "size" : 16,
         "signed" : false
       },
-      "id" : 268525571,
+      "id" : 268529667,
       "telemetryUpdate" : "always"
     },
     {
@@ -5428,7 +6145,7 @@
         "kind" : "float",
         "size" : 32
       },
-      "id" : 268525572,
+      "id" : 268529668,
       "telemetryUpdate" : "always"
     },
     {
@@ -5439,7 +6156,7 @@
         "size" : 32,
         "signed" : false
       },
-      "id" : 268525573,
+      "id" : 268529669,
       "telemetryUpdate" : "always"
     },
     {
@@ -5450,7 +6167,7 @@
         "size" : 32,
         "signed" : false
       },
-      "id" : 268525574,
+      "id" : 268529670,
       "telemetryUpdate" : "always"
     },
     {
@@ -5461,7 +6178,7 @@
         "size" : 32,
         "signed" : false
       },
-      "id" : 268525575,
+      "id" : 268529671,
       "telemetryUpdate" : "always"
     },
     {
@@ -5470,7 +6187,7 @@
         "name" : "Components.Vec3",
         "kind" : "qualifiedIdentifier"
       },
-      "id" : 268529664,
+      "id" : 268533760,
       "telemetryUpdate" : "always",
       "annotation" : "m/s^2"
     },
@@ -5480,7 +6197,7 @@
         "name" : "Components.Vec3",
         "kind" : "qualifiedIdentifier"
       },
-      "id" : 268529665,
+      "id" : 268533761,
       "telemetryUpdate" : "always"
     },
     {
@@ -5489,7 +6206,7 @@
         "name" : "Components.Vec3",
         "kind" : "qualifiedIdentifier"
       },
-      "id" : 268529666,
+      "id" : 268533762,
       "telemetryUpdate" : "always",
       "annotation" : "gauss"
     },
@@ -5499,7 +6216,7 @@
         "name" : "Components.Vec3",
         "kind" : "qualifiedIdentifier"
       },
-      "id" : 268529667,
+      "id" : 268533763,
       "telemetryUpdate" : "always"
     },
     {
@@ -5508,7 +6225,7 @@
         "name" : "Components.SunMv",
         "kind" : "qualifiedIdentifier"
       },
-      "id" : 268529668,
+      "id" : 268533764,
       "telemetryUpdate" : "always"
     },
     {
@@ -5519,7 +6236,7 @@
         "size" : 8,
         "signed" : false
       },
-      "id" : 268529669,
+      "id" : 268533765,
       "telemetryUpdate" : "always",
       "annotation" : "1..6, the panel with the highest sun-sensor voltage"
     },
@@ -5529,7 +6246,7 @@
         "name" : "Components.MtqDuty",
         "kind" : "qualifiedIdentifier"
       },
-      "id" : 268533760,
+      "id" : 268537856,
       "telemetryUpdate" : "always"
     },
     {
@@ -5539,7 +6256,7 @@
         "kind" : "bool",
         "size" : 8
       },
-      "id" : 268533761,
+      "id" : 268537857,
       "telemetryUpdate" : "always"
     },
     {
@@ -5550,7 +6267,7 @@
         "size" : 32,
         "signed" : false
       },
-      "id" : 268537856,
+      "id" : 268541952,
       "telemetryUpdate" : "always"
     },
     {
@@ -5559,7 +6276,7 @@
         "name" : "Components.DetumbleMode",
         "kind" : "qualifiedIdentifier"
       },
-      "id" : 268541952,
+      "id" : 268546048,
       "telemetryUpdate" : "always"
     },
     {
@@ -5569,7 +6286,7 @@
         "kind" : "float",
         "size" : 32
       },
-      "id" : 268541953,
+      "id" : 268546049,
       "telemetryUpdate" : "always",
       "annotation" : "% duty per uT/s"
     },
@@ -5579,7 +6296,7 @@
         "name" : "Components.Vec3",
         "kind" : "qualifiedIdentifier"
       },
-      "id" : 268541954,
+      "id" : 268546050,
       "telemetryUpdate" : "always",
       "annotation" : "Filtered dB/dt per body axis, uT/s"
     },
@@ -5590,7 +6307,7 @@
         "kind" : "float",
         "size" : 32
       },
-      "id" : 268541955,
+      "id" : 268546051,
       "telemetryUpdate" : "always",
       "annotation" : "|dB/dt|, uT/s: the tumble-rate proxy the controller damps"
     },
@@ -5601,7 +6318,7 @@
         "kind" : "float",
         "size" : 32
       },
-      "id" : 268541956,
+      "id" : 268546052,
       "telemetryUpdate" : "always",
       "annotation" : "Crude body-rate estimate |dB/dt| / |B|, deg/s. It sees only the rate component\nperpendicular to B (rotation about B is invisible) plus the orbital field change\n(~0.1 deg/s in LEO). A proxy, not a gyro."
     },
@@ -5611,7 +6328,7 @@
         "name" : "Components.MtqDuty",
         "kind" : "qualifiedIdentifier"
       },
-      "id" : 268541957,
+      "id" : 268546053,
       "telemetryUpdate" : "always",
       "annotation" : "Duty the controller commands, % per axis (0 when OFF)"
     }
@@ -5625,8 +6342,35 @@
       "name" : "ReferenceDeploymentPackets",
       "members" : [
         {
-          "name" : "Satellite",
+          "name" : "ComDriver",
           "id" : 5,
+          "group" : 2,
+          "members" : [
+            "ReferenceDeployment.comDriver.RxBytes",
+            "ReferenceDeployment.comDriver.RxOverrunCount",
+            "ReferenceDeployment.comDriver.RxBackpressureCount",
+            "ReferenceDeployment.comDriver.RxAllocFailCount",
+            "ReferenceDeployment.comDriver.TxBytes",
+            "ReferenceDeployment.comDriver.TxDropCount"
+          ]
+        },
+        {
+          "name" : "Health",
+          "id" : 1,
+          "group" : 1,
+          "members" : [
+            "CdhCore.cmdDisp.CommandsDispatched",
+            "CdhCore.cmdDisp.CommandsDropped",
+            "CdhCore.cmdDisp.CommandErrors",
+            "ComCcsds.comQueue.comQueueDepth",
+            "ComCcsds.commsBufferManager.HiBuffs",
+            "ReferenceDeployment.rateGroup10Hz.RgMaxTime",
+            "ReferenceDeployment.rateGroup1Hz.RgMaxTime"
+          ]
+        },
+        {
+          "name" : "Satellite",
+          "id" : 6,
           "group" : 1,
           "members" : [
             "ReferenceDeployment.eps.vbat_mV",
@@ -5649,33 +6393,6 @@
           ]
         },
         {
-          "name" : "Health",
-          "id" : 1,
-          "group" : 1,
-          "members" : [
-            "CdhCore.cmdDisp.CommandsDispatched",
-            "CdhCore.cmdDisp.CommandsDropped",
-            "CdhCore.cmdDisp.CommandErrors",
-            "ComCcsds.comQueue.comQueueDepth",
-            "ComCcsds.commsBufferManager.HiBuffs",
-            "ReferenceDeployment.rateGroup10Hz.RgMaxTime",
-            "ReferenceDeployment.rateGroup1Hz.RgMaxTime"
-          ]
-        },
-        {
-          "name" : "Detumble",
-          "id" : 6,
-          "group" : 1,
-          "members" : [
-            "ReferenceDeployment.detumble.mode",
-            "ReferenceDeployment.detumble.gain",
-            "ReferenceDeployment.detumble.bdot_uT_s",
-            "ReferenceDeployment.detumble.bdot_norm_uT_s",
-            "ReferenceDeployment.detumble.rate_est_deg_s",
-            "ReferenceDeployment.detumble.duty_cmd"
-          ]
-        },
-        {
           "name" : "HealthWarnings",
           "id" : 2,
           "group" : 1,
@@ -5684,8 +6401,25 @@
             "CdhCore.events.EventsDropped",
             "ComCcsds.commsBufferManager.NoBuffs",
             "ComCcsds.commsBufferManager.EmptyBuffs",
+            "ComCcsds.comQueue.comIngressDropped",
+            "ComCcsds.comQueue.buffIngressDropped",
+            "ComCcsds.comQueue.comManagedDropped",
+            "ComCcsds.comQueue.buffManagedDropped",
             "ReferenceDeployment.rateGroup10Hz.RgCycleSlips",
             "ReferenceDeployment.rateGroup1Hz.RgCycleSlips"
+          ]
+        },
+        {
+          "name" : "Detumble",
+          "id" : 7,
+          "group" : 1,
+          "members" : [
+            "ReferenceDeployment.detumble.mode",
+            "ReferenceDeployment.detumble.gain",
+            "ReferenceDeployment.detumble.bdot_uT_s",
+            "ReferenceDeployment.detumble.bdot_norm_uT_s",
+            "ReferenceDeployment.detumble.rate_est_deg_s",
+            "ReferenceDeployment.detumble.duty_cmd"
           ]
         },
         {
