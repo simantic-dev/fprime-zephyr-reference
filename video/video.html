@@ -93,15 +93,22 @@ Video({
         "Everything it talks to is simulated: power, memory, sensors, the orbit."],
       html: `
         <div class="abs legend" style="left:0;top:0" id="su-leg"><span><i style="background:#fff;border:1.5px solid var(--ink)"></i>real software, unchanged</span><span><i class="simbox"></i>simulated</span></div>
-        <div class="abs card box" style="left:0;top:250px;width:330px" id="su-gds"><div class="k">Ground station</div><div class="v">fprime-gds</div><div class="s">F&nbsp;Prime's stock ground software</div></div>
-        <div class="wire" style="left:330px;top:318px;width:190px" id="su-w0"></div><div class="bus" style="left:356px;top:280px" id="su-l0">UART ⇄ TCP</div>
-        <div class="abs simbox box" style="left:520px;top:110px;width:520px;height:420px" id="su-mcu"><div class="k">${D.board} · ${D.mcu} · simulated</div>
-          <div class="card stack box" style="margin-top:70px" id="su-fw"><div class="k">Firmware</div><div class="v">F&nbsp;Prime flight software</div><div class="s">rate groups, commands, telemetry, drivers</div></div></div>
+        <div class="abs card box" style="left:0;top:262px;width:330px" id="su-gds"><div class="k">Ground station</div><div class="v">fprime-gds</div><div class="s">F&nbsp;Prime's stock ground software</div></div>
+        <div class="wire" style="left:330px;top:330px;width:190px" id="su-w0"></div><div class="bus" style="left:356px;top:292px" id="su-l0">UART ⇄ TCP</div>
+        <div class="abs simbox box" style="left:520px;top:20px;width:520px;height:620px" id="su-mcu"><div class="k">${D.board} · ${D.mcu} · simulated</div>
+          <div class="card stack box" style="margin-top:190px" id="su-fw"><div class="k">Firmware</div><div class="v">F&nbsp;Prime flight software</div><div class="s">rate groups, commands, telemetry, drivers</div></div></div>
         ${[["CAN", "Power system + battery", "replies to housekeeping requests"], ["SPI", "FRAM", "keeps the boot count"],
            ["I2C", "Magnetometer, accelerometer", "values from the orbit model"], ["ADC", "Sun sensors on 6 panels", "lit or dark by the orbit model"]]
           .map(([bus, n, s], i) => `<div class="wire sim" style="left:1040px;top:${i*170+60}px;width:200px" id="su-w${i+1}"></div>
             <div class="bus" style="left:1090px;top:${i*170+22}px" id="su-l${i+1}">${bus}</div>
             <div class="abs simbox box" style="left:1240px;top:${i*170}px;width:520px;height:120px" id="su-p${i}"><div class="v" style="margin-top:0">${n}</div><div class="s">${s}</div></div>`).join("")}`,
+      setup() {   // every wire must touch both boxes it joins: render.py stops on this error
+        const r = id => $(id).getBoundingClientRect(), mcu = r("#su-mcu"), touch = (w, box, side) =>
+          w.top >= box.top && w.bottom <= box.bottom && Math.abs((side == "L" ? w.left : w.right) - (side == "L" ? box.right : box.left)) <= 2;
+        if (!touch(r("#su-w0"), r("#su-gds"), "L") || !touch(r("#su-w0"), mcu, "R")) throw new Error("setup: ground-link wire does not meet its boxes");
+        for (let i = 0; i < 4; i++) if (!touch(r("#su-w" + (i + 1)), mcu, "L") || !touch(r("#su-w" + (i + 1)), r("#su-p" + i), "R"))
+          throw new Error(`setup: bus wire ${i + 1} does not meet its boxes`);
+      },
       draw(t, a) {
         appear($("#su-leg"), t, a + 0.3); appear($("#su-mcu"), t, a + 0.4); appear($("#su-fw"), t, a + 0.7);
         appear($("#su-gds"), t, a + 1.1); appear($("#su-w0"), t, a + 1.1); appear($("#su-l0"), t, a + 1.1);
