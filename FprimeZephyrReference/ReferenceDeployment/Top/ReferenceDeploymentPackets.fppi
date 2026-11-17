@@ -3,6 +3,7 @@ telemetry packets ReferenceDeploymentPackets {
   packet Health id 1 group 1 {
     CdhCore.cmdDisp.CommandsDispatched
     CdhCore.cmdDisp.CommandsDropped
+    CdhCore.cmdDisp.CommandErrors  # written by cmdDisp.run, now on a rate group
     ComCcsds.comQueue.comQueueDepth
     ComCcsds.commsBufferManager.HiBuffs
     rateGroup10Hz.RgMaxTime
@@ -34,8 +35,36 @@ telemetry packets ReferenceDeploymentPackets {
   }
 
 
+  packet Satellite id 5 group 1 {
+    eps.vbat_mV
+    eps.ibat_mA
+    eps.v3v3_mV
+    eps.v5_mV
+    eps.temp_C
+    eps.uptime_s
+    eps.hk_ok
+    eps.hk_retries
+    adcs.accel0
+    adcs.accel1
+    adcs.magn0
+    adcs.magn1
+    adcs.sun_mV
+    adcs.brightest_panel
+    mtq.duty_pct
+    mtq.enabled
+    fram.boot_count
+  }
+
+  packet Detumble id 6 group 1 {
+    detumble.mode
+    detumble.gain
+    detumble.bdot_uT_s
+    detumble.bdot_norm_uT_s
+    detumble.rate_est_deg_s
+    detumble.duty_cmd
+  }
+
 } omit {
-  CdhCore.cmdDisp.CommandErrors
   # Only has one library, no custom versions
   CdhCore.version.LibraryVersion02
   CdhCore.version.LibraryVersion03

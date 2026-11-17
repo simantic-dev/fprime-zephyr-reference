@@ -27,6 +27,11 @@ module ReferenceDeployment {
     instance timer
     instance comDriver
     instance nullPrmDb
+    instance eps
+    instance adcs
+    instance mtq
+    instance fram
+    instance detumble
 
   # ----------------------------------------------------------------------
   # Pattern graph specifiers
@@ -82,6 +87,8 @@ module ReferenceDeployment {
       # High rate (10Hz) rate group
       rateGroupDriver.CycleOut[Ports_RateGroups.rateGroup10Hz] -> rateGroup10Hz.CycleIn
       rateGroup10Hz.RateGroupMemberOut[0] -> comDriver.schedIn
+      rateGroup10Hz.RateGroupMemberOut[1] -> eps.run
+      rateGroup10Hz.RateGroupMemberOut[2] -> detumble.run
 
       # Slow rate (1Hz) rate group
       rateGroupDriver.CycleOut[Ports_RateGroups.rateGroup1Hz] -> rateGroup1Hz.CycleIn
@@ -91,10 +98,13 @@ module ReferenceDeployment {
       rateGroup1Hz.RateGroupMemberOut[3] -> CdhCore.tlmSend.Run
       rateGroup1Hz.RateGroupMemberOut[4] -> ComCcsds.aggregator.timeout
       rateGroup1Hz.RateGroupMemberOut[5] -> CdhCore.Subtopology.eventsRun
+      rateGroup1Hz.RateGroupMemberOut[6] -> CdhCore.Subtopology.cmdDispRun
+      rateGroup1Hz.RateGroupMemberOut[7] -> adcs.run
+      rateGroup1Hz.RateGroupMemberOut[8] -> fram.run
     }
 
     connections ReferenceDeployment {
-
+      detumble.mtqOut -> mtq.driveIn
     }
 
   }

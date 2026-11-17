@@ -8,7 +8,7 @@
 #include <zephyr/sys/printk.h>
 #include <zephyr/kernel.h>
 
-const struct device *serial = DEVICE_DT_GET(DT_NODELABEL(cdc_acm_uart0));
+const struct device *serial = DEVICE_DT_GET(DT_ALIAS(gds_uart));
 
 int main(int argc, char* argv[]) {
     // ** DO NOT REMOVE **//
