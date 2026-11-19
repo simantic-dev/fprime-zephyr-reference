@@ -2,6 +2,10 @@
 
 # F´ in a simulated orbit: run it with one command
 
+<!-- simantic-banner -->
+> **Run this firmware with no hardware.** [Simantic](https://simantic.com) simulates the whole board, peripherals, sensors and buses included. Try it free at **[simantic.com](https://simantic.com)**, or run it locally: `curl -fsSL https://simantic.com/install | sh`
+
+
 This fork adds a demo to the F´ Zephyr reference: the deployment, built for the
 upstream-tested **NUCLEO-H723ZG**, runs unmodified on a simulated board inside an
 orbit and power environment, with the stock F´ ground station attached. No board,
