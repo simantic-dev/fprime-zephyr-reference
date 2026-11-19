@@ -1,0 +1,10 @@
+# CI scenario: scenario-faults.yaml without the GDS bridge (nothing listens on tcp:5761).
+machines:
+  sat:
+    mcu: STM32H723ZG
+    overlay: faults.board
+    elf: fprime-demo.elf
+media:
+  - type: can
+    connect: [sat.fdcan1, sat.epsnode]
+timeout: 55
