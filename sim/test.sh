@@ -4,11 +4,9 @@
 # 55 s of virtual time, no GDS and no network. Pass = the firmware boots, stores its boot
 # count in FRAM, and retries and recovers each of the three damaged EPS housekeeping requests.
 cd "$(dirname "$0")/.." || exit 1
-SIM_BIN=${SIM:+$SIM/}
 OUT=$(mktemp) || exit 1
 trap 'rm -f "$OUT"' EXIT
-# SIM is the path to sim/ per the nightly; the binary is on PATH or in $SIMBIN
-${SIMBIN:-sim} run --scenario sim/scenario-test.yaml --ascii usart2,epsnode --timeout 55 > "$OUT" 2>&1
+${SIM:-sim} run --scenario sim/scenario-test.yaml --ascii usart2,epsnode --timeout 55 > "$OUT" 2>&1
 rc=$?
 fail=0
 check() { if grep -qF -- "$2" "$OUT"; then echo "ok   $1"; else echo "FAIL $1"; fail=1; fi; }
